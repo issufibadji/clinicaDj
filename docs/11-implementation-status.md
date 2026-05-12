@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-12 — FASE 7 concluída e homologada
+**Última atualização:** 2026-05-12 — FASE 8 concluída e homologada
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -188,8 +188,8 @@
 |---|------|--------|------------|
 | 8.1 | Migration `system_settings` criada e rodada | ✅ | `2024_01_01_000230` |
 | 8.2 | Model `SystemSetting` com `get()`, `set()`, `typed_value` | ✅ | |
-| 8.3 | `SaveSystemSettingAction` | ⬜ | |
-| 8.4 | Livewire `SystemSettings` (formulário por tipo) | ⬜ | |
+| 8.3 | `SaveSystemSettingAction` | ✅ | Valida por tipo (boolean/integer/decimal/string) |
+| 8.4 | Livewire `SystemSettings` (formulário por tipo) | ✅ | Rota: `GET /sistema/configuracoes` · toggle/input/text · flash 2.5s |
 
 ---
 
@@ -319,7 +319,7 @@
 | FASE 5 — Auth | 9 | 9 | 100% |
 | FASE 6 — Seeders | 8 | 8 | 100% |
 | FASE 7 — Menus | 5 | 5 | 100% |
-| FASE 8 — Settings | 4 | 2 | 50% |
+| FASE 8 — Settings | 4 | 4 | 100% |
 | FASE 9 — Auditoria | 4 | 2 | 50% |
 | FASE 10 — RBAC CRUD | 4 | 0 | 0% |
 | FASE 11 — Perfil/2FA | 5 | 1 | 20% |
@@ -328,9 +328,9 @@
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **77** | **44%** |
+| **TOTAL** | **175** | **79** | **45%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 8 — Configurações dinâmicas (Livewire SystemSettings)
+> **Próxima fase a executar:** FASE 9 — Auditoria (Livewire AuditLog com filtros + paginação)

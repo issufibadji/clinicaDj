@@ -17,6 +17,8 @@ Route::view('profile', 'profile')
 Route::middleware(['auth', 'check2fa'])->prefix('sistema')->name('admin.sistema.')->group(function () {
     Volt::route('menus', 'admin.system.menu-manager')
         ->name('menus');
+    Volt::route('configuracoes', 'admin.system.system-settings')
+        ->name('configuracoes');
 });
 
 require __DIR__.'/auth.php';
