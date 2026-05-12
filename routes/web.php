@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
 Route::view('/', 'welcome');
 
@@ -11,5 +12,11 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth', 'check2fa'])
     ->name('profile');
+
+// ── Sistema (admin only) ──────────────────────────────────────────────────────
+Route::middleware(['auth', 'check2fa'])->prefix('sistema')->name('admin.sistema.')->group(function () {
+    Volt::route('menus', 'admin.system.menu-manager')
+        ->name('menus');
+});
 
 require __DIR__.'/auth.php';

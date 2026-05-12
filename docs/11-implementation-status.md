@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-12 — FASE 5 concluída e homologada
+**Última atualização:** 2026-05-12 — FASE 7 concluída e homologada
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -178,7 +178,7 @@
 | 7.2 | Model `MenuItem` com scopes (`visible`, `forLevel`, `ordered`) | ✅ | |
 | 7.3 | `GetSidebarMenus` Action com cache por nível | ✅ | Implementado em FASE 4 |
 | 7.4 | Sidebar renderiza grupos dinamicamente | ✅ | Implementado em FASE 4 |
-| 7.5 | Livewire `MenuManager` (toggle visibilidade + min_level) | ⬜ | |
+| 7.5 | Livewire `MenuManager` (toggle visibilidade + min_level + invalida cache) | ✅ | Rota: `GET /sistema/menus` → `admin.sistema.menus` |
 
 ---
 
@@ -318,7 +318,7 @@
 | FASE 4 — Layout | 12 | 12 | 100% |
 | FASE 5 — Auth | 9 | 9 | 100% |
 | FASE 6 — Seeders | 8 | 8 | 100% |
-| FASE 7 — Menus | 5 | 2 | 40% |
+| FASE 7 — Menus | 5 | 5 | 100% |
 | FASE 8 — Settings | 4 | 2 | 50% |
 | FASE 9 — Auditoria | 4 | 2 | 50% |
 | FASE 10 — RBAC CRUD | 4 | 0 | 0% |
@@ -328,9 +328,9 @@
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **74** | **42%** |
+| **TOTAL** | **175** | **77** | **44%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 7 — Sistema de menus dinâmico (Livewire MenuManager)
+> **Próxima fase a executar:** FASE 8 — Configurações dinâmicas (Livewire SystemSettings)
