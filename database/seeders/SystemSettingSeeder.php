@@ -40,7 +40,7 @@ class SystemSettingSeeder extends Seeder
             ],
             [
                 'key'         => 'clinic_name',
-                'value'       => 'Clínica JM',
+                'value'       => 'Clínica DR.João Mendes',
                 'type'        => 'string',
                 'label'       => 'Nome da Clínica',
                 'description' => 'Nome exibido em documentos e notificações.',

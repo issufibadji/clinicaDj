@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-12 — FASE 4 concluída e homologada
+**Última atualização:** 2026-05-12 — FASE 5 concluída e homologada
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -138,11 +138,11 @@
 | 5.2 | Login funcional com redirecionamento para dashboard | ✅ | Homologado em 2026-05-12 |
 | 5.3 | Middleware `Check2FA` criado | ✅ | `app/Http/Middleware/Check2FA.php` |
 | 5.4 | Alias `check2fa` registrado em `bootstrap/app.php` | ✅ | |
-| 5.5 | Views de auth personalizadas com design system da clínica | ⬜ | Usa layout padrão Breeze |
-| 5.6 | Componente `TwoFactorChallenge` (Livewire) | ⬜ | |
-| 5.7 | Rota `GET /dois-fatores` com middleware `auth, check2fa` | ⬜ | |
-| 5.8 | Fluxo 2FA completo: ativar → logout → desafio → dashboard | ⬜ | |
-| 5.9 | Usuário sem 2FA não vê o desafio | 🔧 | Lógica no middleware, sem tela |
+| 5.5 | Views de auth personalizadas com design system da clínica | ✅ | login, register, forgot/reset/confirm-password, verify-email — em PT-BR |
+| 5.6 | Componente `TwoFactorChallenge` (Livewire Volt) | ✅ | `pages.auth.two-factor-challenge` — código TOTP + recuperação |
+| 5.7 | Rota `GET /dois-fatores` → `two-factor.challenge` | ✅ | Middleware `auth` em `routes/auth.php` |
+| 5.8 | Middleware `check2fa` em dashboard e profile | ✅ | `routes/web.php` |
+| 5.9 | Usuário sem 2FA não vê o desafio | ✅ | `hasTwoFactorEnabled()` no middleware |
 
 ---
 
@@ -176,8 +176,8 @@
 |---|------|--------|------------|
 | 7.1 | Migration `menu_items` criada e rodada | ✅ | `2024_01_01_000220` |
 | 7.2 | Model `MenuItem` com scopes (`visible`, `forLevel`, `ordered`) | ✅ | |
-| 7.3 | `GetSidebarMenus` Action com cache por nível | ⬜ | |
-| 7.4 | Sidebar renderiza grupos dinamicamente | ⬜ | |
+| 7.3 | `GetSidebarMenus` Action com cache por nível | ✅ | Implementado em FASE 4 |
+| 7.4 | Sidebar renderiza grupos dinamicamente | ✅ | Implementado em FASE 4 |
 | 7.5 | Livewire `MenuManager` (toggle visibilidade + min_level) | ⬜ | |
 
 ---
@@ -302,6 +302,8 @@
 | 2026-05-12 | `model_has_permissions.model_id` era `BIGINT`, incompatível com UUID | `2026_05_12_193951_create_permission_tables.php` |
 | 2026-05-12 | `sessions.user_id` era `foreignId()` (BIGINT), bloqueava login | `0001_01_01_000000_create_users_table.php` |
 | 2026-05-12 | Alpine.js carregado duas vezes (app.js + Livewire 3) causava "page expired" | `resources/js/app.js` |
+| 2026-05-12 | `audits.user_id` era `unsignedBigInteger`, truncava UUID do usuário logado | `2026_05_12_200521_create_audits_table.php` |
+| 2026-05-12 | `audits.auditable_id` (`morphs`) era `unsignedBigInteger`, truncava UUID dos models | `2026_05_12_200521_create_audits_table.php` |
 
 ---
 
@@ -314,7 +316,7 @@
 | FASE 2 — Pacotes | 15 | 15 | 100% |
 | FASE 3 — Tailwind/Vite | 9 | 9 | 100% |
 | FASE 4 — Layout | 12 | 12 | 100% |
-| FASE 5 — Auth | 9 | 4 | 44% |
+| FASE 5 — Auth | 9 | 9 | 100% |
 | FASE 6 — Seeders | 8 | 8 | 100% |
 | FASE 7 — Menus | 5 | 2 | 40% |
 | FASE 8 — Settings | 4 | 2 | 50% |
@@ -326,9 +328,9 @@
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **69** | **39%** |
+| **TOTAL** | **175** | **74** | **42%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 5 — Autenticação completa (personalizar views auth + componente 2FA)
+> **Próxima fase a executar:** FASE 7 — Sistema de menus dinâmico (Livewire MenuManager)
