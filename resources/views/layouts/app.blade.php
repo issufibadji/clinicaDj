@@ -1,36 +1,45 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Clínica JM') }}</title>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    {{-- Dark mode: aplica antes do render para evitar flash --}}
+    <script>
+        if (localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 font-sans antialiased h-full">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            <livewire:layout.navigation />
+    <div class="flex h-screen overflow-hidden"
+         x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+        {{-- Sidebar --}}
+        @include('partials.sidebar')
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
+        {{-- Área principal --}}
+        <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+
+            {{-- Topbar --}}
+            @include('partials.topbar')
+
+            {{-- Conteúdo da página --}}
+            <main class="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900">
+                <div class="p-6">
+                    @include('partials.flash')
+                    {{ $slot }}
+                </div>
             </main>
+
         </div>
-    </body>
+    </div>
+
+</body>
 </html>

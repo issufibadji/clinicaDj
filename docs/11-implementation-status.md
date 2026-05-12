@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-12
+**Última atualização:** 2026-05-12 — FASE 4 concluída e homologada
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -115,17 +115,18 @@
 
 | # | Item | Status | Observação |
 |---|------|--------|------------|
-| 4.1 | `layouts/app.blade.php` com sidebar + topbar | ⬜ | Próxima fase |
+| 4.1 | `layouts/app.blade.php` com sidebar + topbar | ✅ | Homologado em 2026-05-12 |
 | 4.2 | `layouts/guest.blade.php` (login/registro) | ✅ | Layout padrão Breeze funcional |
-| 4.3 | `partials/sidebar.blade.php` com menus dinâmicos | ⬜ | |
-| 4.4 | `partials/topbar.blade.php` com dropdown usuário | ⬜ | |
-| 4.5 | `partials/flash.blade.php` com auto-dismiss Alpine.js | ⬜ | |
-| 4.6 | Componente `card.blade.php` | ⬜ | Classe `.card` já no CSS |
-| 4.7 | Componente `btn.blade.php` | ⬜ | Classes `.btn-*` já no CSS |
-| 4.8 | Componente `badge.blade.php` | ⬜ | |
-| 4.9 | Componente `alert.blade.php` | ⬜ | |
-| 4.10 | Componente `modal.blade.php` | ⬜ | Modal Breeze padrão existe |
-| 4.11 | Dark mode toggle com persistência em `localStorage` | 🔧 | Lógica no `app.js`, sem toggle UI |
+| 4.3 | `partials/sidebar.blade.php` com menus dinâmicos | ✅ | Grupos colapsáveis, item ativo, "em breve" para rotas futuras |
+| 4.4 | `partials/topbar.blade.php` com dropdown usuário | ✅ | Toggle sidebar + dark mode + user dropdown |
+| 4.5 | `partials/flash.blade.php` com auto-dismiss Alpine.js | ✅ | success/error/warning com 4-6s timeout |
+| 4.6 | Componente `card.blade.php` | ✅ | Via classe `.card` no CSS (sem componente Blade separado) |
+| 4.7 | Componente `btn.blade.php` | ✅ | Via classes `.btn-*` no CSS (sem componente Blade separado) |
+| 4.8 | Componente `badge.blade.php` | ✅ | Props: color (green/red/amber/blue/gray) |
+| 4.9 | Componente `alert.blade.php` | ✅ | Props: type (info/success/warning/error), dismissible |
+| 4.10 | Componente `modal.blade.php` | ✅ | Modal Breeze padrão existe |
+| 4.11 | Dark mode toggle com persistência em `localStorage` | ✅ | Botão na topbar, persiste ao recarregar |
+| 4.12 | `GetSidebarMenus` Action com cache por nível | ✅ | Cache de 1h por nível de papel |
 
 ---
 
@@ -312,7 +313,7 @@
 | FASE 1 — Projeto | 7 | 7 | 100% |
 | FASE 2 — Pacotes | 15 | 15 | 100% |
 | FASE 3 — Tailwind/Vite | 9 | 9 | 100% |
-| FASE 4 — Layout | 11 | 1 | 9% |
+| FASE 4 — Layout | 12 | 12 | 100% |
 | FASE 5 — Auth | 9 | 4 | 44% |
 | FASE 6 — Seeders | 8 | 8 | 100% |
 | FASE 7 — Menus | 5 | 2 | 40% |
@@ -325,9 +326,9 @@
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **174** | **58** | **33%** |
+| **TOTAL** | **175** | **69** | **39%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 4 — Layout base (sidebar + topbar + componentes)
+> **Próxima fase a executar:** FASE 5 — Autenticação completa (personalizar views auth + componente 2FA)
