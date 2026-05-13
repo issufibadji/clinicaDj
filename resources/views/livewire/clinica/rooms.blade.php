@@ -94,7 +94,7 @@ new #[Layout('layouts.app')] class extends Component
             ->orderBy('name')
             ->paginate(15);
 
-        $departments = Department::where('is_active', true)->orderBy('name')->get();
+        $departments = $this->showForm ? Department::where('is_active', true)->orderBy('name')->get() : collect();
 
         return compact('rooms', 'departments');
     }

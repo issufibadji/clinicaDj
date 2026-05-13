@@ -120,11 +120,13 @@ new #[Layout('layouts.app')] class extends Component
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $appointments = Appointment::with(['patient', 'doctor.user'])
-            ->whereDoesntHave('payment')
-            ->orWhere('id', $this->formAppointmentId)
-            ->orderBy('scheduled_at', 'desc')
-            ->get();
+        $appointments = $this->showForm
+            ? Appointment::with(['patient', 'doctor.user'])
+                ->whereDoesntHave('payment')
+                ->orWhere('id', $this->formAppointmentId)
+                ->orderBy('scheduled_at', 'desc')
+                ->get()
+            : collect();
 
         return compact('payments', 'appointments', 'methodLabels', 'statusLabels', 'statusColors');
     }

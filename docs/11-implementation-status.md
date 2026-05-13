@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-13 — FASE 14 concluída (99/99 testes passando)
+**Última atualização:** 2026-05-13 — FASE 15 concluída (99/99 testes passando)
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -339,14 +339,22 @@
 
 ## FASE 15 — Performance e cache
 
-| # | Item | Status |
-|---|------|--------|
-| 15.1 | Debugbar instalado e N+1 identificados | ✅ | 
-| 15.2 | Eager loading nas listagens | ⬜ |
-| 15.3 | Cache de sidebar por nível (`sidebar.menu.level.*`) | ⬜ |
-| 15.4 | Cache de system settings | ⬜ |
-| 15.5 | Cache Spatie Permission ativo | ⬜ |
-| 15.6 | Índices de banco para colunas de filtro | ⬜ |
+| # | Item | Status | Observação |
+|---|------|--------|------------|
+| 15.1 | Debugbar instalado e N+1 identificados | ✅ | `barryvdh/laravel-debugbar` v4.x, ativo com `APP_DEBUG=true` |
+| 15.2 | Carregamento condicional nos formulários (N+1 eliminado) | ✅ | 5 componentes: doctors, patients, rooms, appointments, payments — `$this->showForm ? Query->get() : collect()` |
+| 15.3 | Cache de sidebar por nível (`sidebar.menu.level.*`) | ✅ | Já existia em `GetSidebarMenus::forUser()` — `Cache::remember(1h)` |
+| 15.4 | Cache de system settings | ✅ | `SystemSetting::get()` → `Cache::remember(1h)` · `set()` → `Cache::forget()` · `clearCache()` adicionados |
+| 15.5 | Cache Spatie Permission ativo | ✅ | Já ativo por padrão em `config/permission.php` (24h TTL) |
+| 15.6 | Índices de banco para colunas de filtro | ✅ | Migration `2026_05_13_191856_add_performance_indexes` — 8 índices em 5 tabelas |
+
+**Artefatos criados/alterados:**
+
+- `app/Models/SystemSetting.php` — `Cache::remember / forget / clearCache` (CACHE_TTL = 3600)
+- `database/migrations/2026_05_13_191856_add_performance_indexes.php` — índices: `payments.status`, `payments.created_at`, `expenses.date`, `expenses.category`, `events.start_at`, `patients.name`, `appointments.status`, `appointments.scheduled_at`
+- 5 Livewire Volt components — carregamento condicional de dropdowns: `doctors`, `patients`, `rooms`, `appointments`, `payments`
+
+**Testes:** 99/99 passando após todas as mudanças desta fase.
 
 ---
 
@@ -393,11 +401,11 @@
 | FASE 12 — Módulos | 66 | 66 | 100% 🔧 |
 | FASE 13 — Dashboard | 5 | 5 | 100% 🔧 |
 | FASE 14 — Testes | 6 | 5 | 83% ✅ |
-| FASE 15 — Performance | 6 | 1 | 17% |
+| FASE 15 — Performance | 6 | 6 | 100% 🔧 |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **165** | **94%** |
+| **TOTAL** | **175** | **170** | **97%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 15 — Performance e cache (eager loading, sidebar cache, Spatie cache, índices)
+> **Próxima fase a executar:** FASE 16 — Produção (otimizações, checklist de segurança e deploy)

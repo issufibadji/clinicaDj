@@ -123,9 +123,9 @@ new #[Layout('layouts.app')] class extends Component
             ->orderBy('scheduled_at', 'desc')
             ->paginate(15);
 
-        $patients = Patient::orderBy('name')->get();
-        $doctors  = Doctor::with('user')->get();
-        $rooms    = Room::where('is_active', true)->orderBy('name')->get();
+        $patients = $this->showForm ? Patient::orderBy('name')->get() : collect();
+        $doctors  = $this->showForm ? Doctor::with('user')->orderBy('created_at')->get() : collect();
+        $rooms    = $this->showForm ? Room::where('is_active', true)->orderBy('name')->get() : collect();
 
         return compact('appointments', 'patients', 'doctors', 'rooms', 'statusLabels', 'statusColors');
     }

@@ -102,8 +102,8 @@ new #[Layout('layouts.app')] class extends Component
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $users = User::whereDoesntHave('doctor')->orderBy('name')->get();
-        $departments = Department::where('is_active', true)->orderBy('name')->get();
+        $users       = $this->showForm ? User::whereDoesntHave('doctor')->orderBy('name')->get() : collect();
+        $departments = $this->showForm ? Department::where('is_active', true)->orderBy('name')->get() : collect();
 
         return compact('doctors', 'users', 'departments');
     }

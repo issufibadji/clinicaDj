@@ -101,7 +101,7 @@ new #[Layout('layouts.app')] class extends Component
             ->orderBy('name')
             ->paginate(15);
 
-        $insurances = Insurance::where('is_active', true)->orderBy('name')->get();
+        $insurances = $this->showForm ? Insurance::where('is_active', true)->orderBy('name')->get() : collect();
 
         return compact('patients', 'insurances');
     }
