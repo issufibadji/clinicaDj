@@ -48,7 +48,7 @@ new class extends Component {
          x-transition:leave="transition ease-in duration-100"
          x-transition:leave-start="opacity-100 scale-100 translate-y-0"
          x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
-         class="absolute right-0 top-full mt-2 w-56
+         class="absolute right-0 top-full mt-2 w-60
                 bg-white dark:bg-slate-800 rounded-xl shadow-lg
                 border border-slate-200 dark:border-slate-700 py-1 z-50"
          style="display: none;">
@@ -70,14 +70,56 @@ new class extends Component {
             @endif
         </div>
 
-        {{-- Links --}}
+        {{-- Links principais --}}
         <div class="py-1">
-            <a href="{{ route('profile') }}" wire:navigate @click="open = false"
+            <a href="{{ route('profile.show') }}" wire:navigate @click="open = false"
                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
                       hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-user-circle class="w-4 h-4 text-slate-400" />
                 Meu Perfil
             </a>
+
+            <a href="{{ route('profile.settings') }}" wire:navigate @click="open = false"
+               class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
+                      hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
+                <x-heroicon-o-cog-6-tooth class="w-4 h-4 text-slate-400" />
+                Configurações
+            </a>
+
+            <a href="{{ route('profile.settings', ['tab' => 'security']) }}" wire:navigate @click="open = false"
+               class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
+                      hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
+                <x-heroicon-o-lock-closed class="w-4 h-4 text-slate-400" />
+                Segurança
+            </a>
+
+            <a href="{{ route('profile.settings', ['tab' => '2fa']) }}" wire:navigate @click="open = false"
+               class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
+                      hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
+                <x-heroicon-o-shield-check class="w-4 h-4 text-slate-400" />
+                <span class="flex-1">Dois Fatores</span>
+                @if(auth()->user()->hasTwoFactorEnabled())
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                @endif
+            </a>
+        </div>
+
+        {{-- Dark mode toggle --}}
+        <div class="border-t border-slate-100 dark:border-slate-700 py-1">
+            <button @click="
+                        document.documentElement.classList.toggle('dark');
+                        localStorage.setItem('theme',
+                            document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+                        );
+                        open = false;
+                    "
+                    class="flex items-center gap-3 w-full px-4 py-2 text-sm text-slate-700 dark:text-slate-300
+                           hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
+                <x-heroicon-o-sun class="w-4 h-4 text-slate-400 dark:hidden" />
+                <x-heroicon-o-moon class="w-4 h-4 text-slate-400 hidden dark:block" />
+                <span class="dark:hidden">Modo escuro</span>
+                <span class="hidden dark:block">Modo claro</span>
+            </button>
         </div>
 
         {{-- Logout --}}

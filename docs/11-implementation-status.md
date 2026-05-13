@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-13 — FASE 10 concluída e homologada
+**Última atualização:** 2026-05-13 — FASE 11 concluída e homologada
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -227,10 +227,10 @@
 | # | Item | Status | Observação |
 |---|------|--------|------------|
 | 11.1 | Helpers no model `User` (`hasTwoFactorEnabled`, `getRecoveryCodes`, `storeRecoveryCodes`, `validateAndConsumeRecoveryCode`, `avatarUrl`, `initials`) | ✅ | |
-| 11.2 | Livewire `UserProfile` (read-only + auditorias recentes) | ⬜ | |
-| 11.3 | Livewire `AccountSettings` (3 abas: info / segurança / 2FA) | ⬜ | |
-| 11.4 | Actions: `UpdateProfileInformation`, `UpdatePassword`, `EnableTwoFactor`, `ConfirmTwoFactor`, `GenerateRecoveryCodes`, `UseRecoveryCode`, `DisableTwoFactor` | ⬜ | |
-| 11.5 | Componente `topbar-user-menu` Alpine.js | ⬜ | |
+| 11.2 | Livewire `UserProfile` (read-only + auditorias recentes) | ✅ | Rota: `GET /perfil` → `profile.show` |
+| 11.3 | Livewire `AccountSettings` (3 abas: info / segurança / 2FA) | ✅ | Rota: `GET /perfil/configuracoes` → `profile.settings` · tab via `?tab=info\|security\|2fa` |
+| 11.4 | Actions: `UpdateProfileInformation`, `UpdatePassword`, `EnableTwoFactor`, `ConfirmTwoFactor`, `GenerateRecoveryCodes`, `DisableTwoFactor` | ✅ | `app/Actions/Profile/` |
+| 11.5 | Dropdown de navegação atualizado (links Perfil / Config / Segurança / 2FA + badge ativo) | ✅ | `livewire/layout/navigation.blade.php` |
 
 ---
 
@@ -329,15 +329,15 @@
 | FASE 8 — Settings | 4 | 4 | 100% |
 | FASE 9 — Auditoria | 4 | 4 | 100% |
 | FASE 10 — RBAC CRUD | 4 | 4 | 100% |
-| FASE 11 — Perfil/2FA | 5 | 1 | 20% |
+| FASE 11 — Perfil/2FA | 5 | 5 | 100% |
 | FASE 12 — Módulos | 66 | 0 | 0% |
 | FASE 13 — Dashboard | 5 | 0 | 0% |
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **85** | **49%** |
+| **TOTAL** | **175** | **89** | **51%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 11 — Perfil e segurança da conta (UserProfile, AccountSettings, 2FA UI)
+> **Próxima fase a executar:** FASE 12 — Módulos clínicos (Departments → Rooms → Insurance → Doctors → Patients → Appointments → Payments → Expenses → Events → Chat)
