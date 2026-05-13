@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Policies\PermissionPolicy;
+use App\Policies\RolePolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
@@ -16,13 +20,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Políticas serão registradas aqui conforme os módulos forem criados.
-        // Exemplo:
-        // Gate::policy(User::class, UserPolicy::class);
-        // Gate::policy(Role::class, RolePolicy::class);
-        // Gate::policy(Permission::class, PermissionPolicy::class);
+        Gate::policy(Permission::class, PermissionPolicy::class);
+        Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
 
-        // Usuários admin (level 1) passam por todas as gates automaticamente
+        // admin bypassa todas as gates
         Gate::before(function ($user, $ability) {
             if ($user->hasRole('admin')) {
                 return true;
