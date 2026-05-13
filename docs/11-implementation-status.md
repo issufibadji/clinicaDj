@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-13 — FASE 12 concluída e aguardando homologação
+**Última atualização:** 2026-05-13 — FASE 13 concluída e aguardando homologação
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -280,11 +280,22 @@
 
 | # | Item | Status |
 |---|------|--------|
-| 13.1 | `StatsCards` (KPIs + `wire:poll.30s`) | ⬜ |
-| 13.2 | `DoctorOnDuty` (carrossel Alpine.js) | ⬜ |
-| 13.3 | `AppointmentChart` (Chart.js + dark mode) | ⬜ |
-| 13.4 | `MiniCalendar` (navegação Alpine.js + dias com consultas) | ⬜ |
-| 13.5 | Dashboard compondo os 4 componentes | ⬜ |
+| 13.1 | `StatsCards` (KPIs + `wire:poll.30s`) | 🔧 |
+| 13.2 | `DoctorOnDuty` (carrossel Alpine.js) | 🔧 |
+| 13.3 | `AppointmentChart` (Chart.js + dark mode) | 🔧 |
+| 13.4 | `MiniCalendar` (navegação Livewire + dots por dia) | 🔧 |
+| 13.5 | Dashboard compondo os 4 componentes | 🔧 |
+
+**Artefatos criados:**
+
+- `resources/js/app.js` — Chart.js importado + Alpine component `appointmentChart` registrado
+- `resources/views/livewire/dashboard/stats-cards.blade.php` — 4 KPIs em tempo real com `wire:poll.30s`
+- `resources/views/livewire/dashboard/doctor-on-duty.blade.php` — carrossel Alpine.js de médicos disponíveis
+- `resources/views/livewire/dashboard/appointment-chart.blade.php` — gráfico de barras (últimos 6 meses) com suporte dark mode via MutationObserver
+- `resources/views/livewire/dashboard/mini-calendar.blade.php` — grade mensal com dots nos dias com consultas + navegação Livewire prev/next
+- `resources/views/livewire/dashboard.blade.php` — página Volt principal compondo os 4 sub-componentes
+- `routes/web.php` — `Route::view` substituído por `Volt::route` para o dashboard
+- `npm run build` — assets recompilados (250 kB JS com Chart.js)
 
 ---
 
@@ -355,13 +366,13 @@
 | FASE 10 — RBAC CRUD | 4 | 4 | 100% |
 | FASE 11 — Perfil/2FA | 5 | 5 | 100% |
 | FASE 12 — Módulos | 66 | 66 | 100% 🔧 |
-| FASE 13 — Dashboard | 5 | 0 | 0% |
+| FASE 13 — Dashboard | 5 | 5 | 100% 🔧 |
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **155** | **89%** |
+| **TOTAL** | **175** | **160** | **91%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 13 — Dashboard (StatsCards + DoctorOnDuty + AppointmentChart + MiniCalendar)
+> **Próxima fase a executar:** FASE 14 — Testes (Pest: auth, RBAC, Livewire components, Actions, módulos clínicos)
