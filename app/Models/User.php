@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\WebPush;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\Permission\Traits\HasRoles;
@@ -95,6 +97,51 @@ class User extends Authenticatable implements AuditableContract, MustVerifyEmail
         }
 
         return false;
+    }
+
+    // ── Web Push ─────────────────────────────────────────────────────────────
+
+    public function pushSubscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
+
+    public function pushNotify(array $payload): void
+    {
+        $vapidPublic  = config('services.webpush.vapid_public_key');
+        $vapidPrivate = config('services.webpush.vapid_private_key');
+        $vapidSubject = config('services.webpush.vapid_subject', 'mailto:admin@clinica.local');
+
+        if (! $vapidPublic || ! $vapidPrivate) {
+            return;
+        }
+
+        $webPush = new WebPush([
+            'VAPID' => [
+                'subject'    => $vapidSubject,
+                'publicKey'  => $vapidPublic,
+                'privateKey' => $vapidPrivate,
+            ],
+        ]);
+
+        foreach ($this->pushSubscriptions as $sub) {
+            $subscription = Subscription::create([
+                'endpoint'        => $sub->endpoint,
+                'keys'            => [
+                    'p256dh' => $sub->p256dh_key,
+                    'auth'   => $sub->auth_key,
+                ],
+                'contentEncoding' => $sub->content_encoding,
+            ]);
+
+            $webPush->queueNotification($subscription, json_encode($payload));
+        }
+
+        foreach ($webPush->flush() as $report) {
+            if ($report->isSubscriptionExpired()) {
+                PushSubscription::where('endpoint', $report->getRequest()->getUri()->__toString())->delete();
+            }
+        }
     }
 
     // ── Relationships ────────────────────────────────────────────────────────

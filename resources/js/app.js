@@ -2,6 +2,57 @@ import './bootstrap';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
+// ── Web Push ──────────────────────────────────────────────────────────────────
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64  = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw     = window.atob(base64);
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
+
+async function registerPush() {
+    const vapidMeta = document.querySelector('meta[name="vapid-public-key"]');
+    if (!vapidMeta || !('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+    try {
+        const reg = await navigator.serviceWorker.register('/service-worker.js');
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') return;
+
+        const existing = await reg.pushManager.getSubscription();
+        if (existing) return;
+
+        const contentEncoding = (PushManager.supportedContentEncodings || []).includes('aes128gcm')
+            ? 'aes128gcm'
+            : 'aesgcm';
+
+        const subscription = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(vapidMeta.content),
+        });
+
+        const json = subscription.toJSON();
+
+        await fetch('/push-subscriptions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({
+                endpoint:         json.endpoint,
+                p256dh_key:       json.keys?.p256dh,
+                auth_key:         json.keys?.auth,
+                content_encoding: contentEncoding,
+            }),
+        });
+    } catch (e) {
+        // silently ignore — push is optional
+    }
+}
+
+document.addEventListener('DOMContentLoaded', registerPush);
+
 // Inicializa dark mode antes do Alpine para evitar flash
 const theme = localStorage.getItem('theme');
 if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {

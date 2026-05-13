@@ -32,4 +32,13 @@ class ManualNotification extends Notification
             'url'      => $this->url,
         ];
     }
+
+    public function webPushPayload(): array
+    {
+        return [
+            'title' => $this->title,
+            'body'  => $this->body,
+            'url'   => $this->url ?: '/',
+        ];
+    }
 }

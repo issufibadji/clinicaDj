@@ -13,19 +13,19 @@ new #[Layout('layouts.app')] class extends Component {
     public bool    $showForm    = false;
     public ?string $deleteBatch = null;
 
-    // form fields
     public string $formTitle   = '';
     public string $formBody    = '';
     public string $formUrl     = '';
     public string $formIcon    = 'bell';
     public string $formColor   = 'blue';
+    public string $formType    = 'internal';
     public array  $formUsers   = [];
     public bool   $formAll     = false;
 
     private static array $ICON_OPTIONS = [
-        'bell'             => 'Sino',
-        'calendar'         => 'Calendário',
-        'banknotes'        => 'Pagamento',
+        'bell'               => 'Sino',
+        'calendar'           => 'Calendário',
+        'banknotes'          => 'Pagamento',
         'information-circle' => 'Informação',
         'exclamation-triangle' => 'Aviso',
     ];
@@ -37,11 +37,18 @@ new #[Layout('layouts.app')] class extends Component {
         'slate' => 'Cinza',
     ];
 
+    private static array $TYPE_OPTIONS = [
+        'internal' => 'Interna (sino do app)',
+        'webpush'  => 'Web Push (navegador)',
+        'both'     => 'Ambas',
+    ];
+
     public function openCreate(): void
     {
         $this->reset(['formTitle', 'formBody', 'formUrl', 'formUsers', 'formAll']);
         $this->formIcon  = 'bell';
         $this->formColor = 'blue';
+        $this->formType  = 'internal';
         $this->showForm  = true;
     }
 
@@ -55,6 +62,7 @@ new #[Layout('layouts.app')] class extends Component {
             'formUrl'   => ['nullable', 'string', 'max:255'],
             'formIcon'  => ['required', 'in:' . implode(',', array_keys(self::$ICON_OPTIONS))],
             'formColor' => ['required', 'in:' . implode(',', array_keys(self::$COLOR_OPTIONS))],
+            'formType'  => ['required', 'in:' . implode(',', array_keys(self::$TYPE_OPTIONS))],
         ]);
 
         if (! $this->formAll && empty($this->formUsers)) {
@@ -66,19 +74,29 @@ new #[Layout('layouts.app')] class extends Component {
             ? User::where('is_active', true)->get()
             : User::whereIn('id', $this->formUsers)->get();
 
-        $batchId = (string) Str::uuid();
-
-        Notification::send(
-            $recipients,
-            new ManualNotification(
-                batchId: $batchId,
-                title:   $this->formTitle,
-                body:    $this->formBody,
-                icon:    $this->formIcon,
-                color:   $this->formColor,
-                url:     $this->formUrl ?: '',
-            )
+        $batchId      = (string) Str::uuid();
+        $notification = new ManualNotification(
+            batchId: $batchId,
+            title:   $this->formTitle,
+            body:    $this->formBody,
+            icon:    $this->formIcon,
+            color:   $this->formColor,
+            url:     $this->formUrl ?: '',
         );
+
+        // Notificação interna (database)
+        if (in_array($this->formType, ['internal', 'both'])) {
+            Notification::send($recipients, $notification);
+        }
+
+        // Web Push (chamada direta, sem canal Laravel)
+        if (in_array($this->formType, ['webpush', 'both'])) {
+            foreach ($recipients->load('pushSubscriptions') as $user) {
+                if ($user->pushSubscriptions->isNotEmpty()) {
+                    $user->pushNotify($notification->webPushPayload());
+                }
+            }
+        }
 
         $this->showForm = false;
         session()->flash('success', __('Notificação enviada para :count destinatário(s).', ['count' => $recipients->count()]));
@@ -106,6 +124,7 @@ new #[Layout('layouts.app')] class extends Component {
     {
         $iconOptions  = self::$ICON_OPTIONS;
         $colorOptions = self::$COLOR_OPTIONS;
+        $typeOptions  = self::$TYPE_OPTIONS;
         $users        = User::orderBy('name')->get(['id', 'name', 'email']);
 
         $sends = DB::table('notifications')
@@ -126,7 +145,7 @@ new #[Layout('layouts.app')] class extends Component {
             ->values()
             ->take(50);
 
-        return compact('iconOptions', 'colorOptions', 'users', 'sends');
+        return compact('iconOptions', 'colorOptions', 'typeOptions', 'users', 'sends');
     }
 }; ?>
 
@@ -135,7 +154,7 @@ new #[Layout('layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ __('Notificações') }}</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Envie notificações internas para os usuários.') }}</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Envie notificações internas e Web Push para os usuários.') }}</p>
         </div>
         <button wire:click="openCreate" class="btn-primary flex items-center gap-2 px-4 py-2 text-sm">
             <x-heroicon-o-paper-airplane class="w-4 h-4" />
@@ -224,6 +243,24 @@ new #[Layout('layouts.app')] class extends Component {
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+
+                    {{-- Tipo --}}
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">
+                            {{ __('Tipo de entrega') }}
+                        </label>
+                        <select wire:model="formType" class="input w-full">
+                            @foreach($typeOptions as $val => $label)
+                                <option value="{{ $val }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @if($formType === 'webpush' || $formType === 'both')
+                            <p class="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                                <x-heroicon-o-information-circle class="w-3.5 h-3.5 inline" />
+                                {{ __('Web Push só é entregue a usuários que permitiram notificações no navegador.') }}
+                            </p>
+                        @endif
                     </div>
 
                     {{-- Destinatários --}}
@@ -333,8 +370,6 @@ new #[Layout('layouts.app')] class extends Component {
                                     <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 {{ $iconClass }}">
                                         @if($send->icon === 'calendar')
                                             <x-heroicon-o-calendar class="w-4 h-4" />
-                                        @elseif($send->icon === 'calendar-days')
-                                            <x-heroicon-o-calendar-days class="w-4 h-4" />
                                         @elseif($send->icon === 'banknotes')
                                             <x-heroicon-o-banknotes class="w-4 h-4" />
                                         @elseif($send->icon === 'information-circle')

@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if(config('services.webpush.vapid_public_key'))
+        <meta name="vapid-public-key" content="{{ config('services.webpush.vapid_public_key') }}">
+    @endif
     <title>{{ config('app.name', 'Clínica DR.João Mendes') }}</title>
 
     {{-- Dark mode: aplica antes do render para evitar flash --}}

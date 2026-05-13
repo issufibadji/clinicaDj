@@ -5,6 +5,11 @@ use Livewire\Volt\Volt;
 
 Route::view('/', 'welcome');
 
+// Push subscription endpoint
+Route::post('/push-subscriptions', [\App\Http\Controllers\PushSubscriptionController::class, 'store'])
+    ->middleware(['auth', 'check2fa'])
+    ->name('push-subscriptions.store');
+
 Route::get('/lang/{locale}', function (string $locale) {
     if (in_array($locale, ['pt', 'en', 'fr'])) {
         session(['locale' => $locale]);

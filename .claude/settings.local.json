@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -r ' *)",
+      "Bash(openssl ecparam *)",
+      "Bash(openssl ec *)",
+      "Bash(python3 -c ' *)",
+      "Bash(node -e ' *)",
+      "Bash(echo \"\")",
+      "Bash(echo \"# Web Push \\(VAPID\\)\")",
+      "Bash(echo \"VAPID_PUBLIC_KEY=BMxIRwOm4dc2-6GBL0jWys_cXD6I2l1ShzGHUWNQxmd9iL2JIp2RRRDHyIXUUDzXgYr6SwzX31NSWBn6H0tNL3w\")",
+      "Bash(echo \"VAPID_PRIVATE_KEY=vA0f-lMbFV6_IyO5upiYuobKFANrAJEuj1mYjD5hP9k\")",
+      "Bash(echo \"VAPID_SUBJECT=mailto:admin@clinica.local\")"
+    ]
+  }
+}
