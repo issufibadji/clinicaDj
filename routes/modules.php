@@ -43,4 +43,7 @@ Route::middleware(['auth', 'verified', 'check2fa'])->group(function () {
     Volt::route('/chat', 'clinica.chat')
         ->middleware('permission:chat.view')
         ->name('chat.index');
+
+    Volt::route('/notificacoes', 'clinica.notifications')
+        ->name('notifications.index');
 });

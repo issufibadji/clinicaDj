@@ -28,7 +28,7 @@ document.addEventListener('alpine:init', () => {
             const ctx  = this.$refs.canvas.getContext('2d');
             const tick = this.dark ? '#94A3B8' : '#64748B';
             const grid = this.dark ? 'rgba(148,163,184,0.1)' : 'rgba(15,23,42,0.06)';
-            const bar  = this.dark ? 'rgba(99,102,241,0.75)' : 'rgba(99,102,241,0.85)';
+            const bar  = this.dark ? 'rgba(16,185,129,0.75)' : 'rgba(5,150,105,0.85)';
             this.chart = new Chart(ctx, {
                 type: 'bar',
                 data: {

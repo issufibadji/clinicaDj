@@ -5,6 +5,13 @@ use Livewire\Volt\Volt;
 
 Route::view('/', 'welcome');
 
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, ['pt', 'en', 'fr'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 Volt::route('dashboard', 'dashboard')
     ->middleware(['auth', 'verified', 'check2fa'])
     ->name('dashboard');

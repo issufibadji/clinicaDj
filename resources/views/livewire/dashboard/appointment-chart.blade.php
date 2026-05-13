@@ -1,17 +1,10 @@
 <?php
 
 use App\Models\Appointment;
-use Illuminate\Support\Carbon;
 use Livewire\Volt\Component;
 
 new class extends Component
 {
-    private static array $MONTH_ABBR = [
-        1 => 'Jan', 2 => 'Fev', 3 => 'Mar', 4 => 'Abr',
-        5 => 'Mai', 6 => 'Jun', 7 => 'Jul', 8 => 'Ago',
-        9 => 'Set', 10 => 'Out', 11 => 'Nov', 12 => 'Dez',
-    ];
-
     public function with(): array
     {
         $months = collect(range(5, 0))->map(fn($i) => now()->subMonths($i)->startOfMonth());
@@ -21,9 +14,7 @@ new class extends Component
             ->groupBy(fn($a) => $a->scheduled_at->format('Y-m'))
             ->map->count();
 
-        $abbr = self::$MONTH_ABBR;
-
-        $labels = $months->map(fn($m) => $abbr[$m->month] . '/' . $m->format('y'))->values()->all();
+        $labels = $months->map(fn($m) => rtrim($m->isoFormat('MMM'), '.') . '/' . $m->format('y'))->values()->all();
         $values = $months->map(fn($m) => (int) ($raw->get($m->format('Y-m'), 0)))->values()->all();
 
         return compact('labels', 'values');
@@ -32,8 +23,8 @@ new class extends Component
 
 <div class="card">
     <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
-        <x-heroicon-o-chart-bar class="w-4 h-4 text-indigo-500" />
-        Consultas por Mês
+        <x-heroicon-o-chart-bar class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+        {{ __('Consultas por Mês') }}
     </h2>
 
     <div wire:ignore

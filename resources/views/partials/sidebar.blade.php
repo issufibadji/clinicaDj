@@ -36,7 +36,7 @@
                         class="flex items-center justify-between w-full px-3 py-1.5 mb-0.5
                                text-[10px] font-bold uppercase tracking-widest
                                text-slate-400 hover:text-slate-300 transition-colors rounded">
-                    <span>{{ $group }}</span>
+                    <span>{{ __($group) }}</span>
                     <span :class="{ 'rotate-180': !open }" class="transition-transform duration-200">
                         <x-heroicon-o-chevron-down class="w-3 h-3" />
                     </span>
@@ -74,10 +74,10 @@
                                 class="w-[18px] h-[18px] flex-shrink-0
                                        {{ $isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200' }}" />
 
-                            <span class="flex-1 truncate">{{ $item->label }}</span>
+                            <span class="flex-1 truncate">{{ __($item->label) }}</span>
 
                             @if(!$hasRoute)
-                                <span class="text-[10px] text-slate-500 font-normal">em breve</span>
+                                <span class="text-[10px] text-slate-500 font-normal">{{ __('em breve') }}</span>
                             @endif
                         </a>
                     @endforeach

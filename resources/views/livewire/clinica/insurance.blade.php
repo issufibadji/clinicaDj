@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Actions\Clinica\Insurances\CreateInsuranceAction;
 use App\Actions\Clinica\Insurances\DeleteInsuranceAction;
@@ -93,12 +93,12 @@ new #[Layout('layouts.app')] class extends Component
 <div>
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Convênios</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Gerencie os convênios médicos aceitos.</p>
+            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ __('Convênios') }}</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Gerencie os convênios médicos aceitos.') }}</p>
         </div>
         @can('create', \App\Models\Insurance::class)
             <button wire:click="openCreate" class="btn-primary flex items-center gap-2 px-4 py-2 text-sm">
-                <x-heroicon-o-plus class="w-4 h-4" />Novo convênio
+                <x-heroicon-o-plus class="w-4 h-4" />{{ __('Novo convênio') }}
             </button>
         @endcan
     </div>
@@ -115,18 +115,18 @@ new #[Layout('layouts.app')] class extends Component
     @endif
 
     <div class="card mb-4">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Buscar convênio..." class="input" />
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="{{ __('Buscar convênio...') }}" class="input" />
     </div>
 
     <div class="card p-0 overflow-hidden">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60">
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nome</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tipo de plano</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Contato</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Pacientes</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Nome') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Tipo de plano') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Contato') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Pacientes') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Status') }}</th>
                     <th class="px-5 py-3 w-24"></th>
                 </tr>
             </thead>
@@ -153,9 +153,9 @@ new #[Layout('layouts.app')] class extends Component
                                 @can('delete', $ins)
                                     @if($confirmId === $ins->id)
                                         <div class="flex items-center gap-1.5">
-                                            <span class="text-xs text-slate-500">Confirmar?</span>
-                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">Sim</button>
-                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">Não</button>
+                                            <span class="text-xs text-slate-500">{{ __('Confirmar?') }}</span>
+                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">{{ __('Sim') }}</button>
+                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">{{ __('Não') }}</button>
                                         </div>
                                     @else
                                         <button wire:click="confirmDelete('{{ $ins->id }}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
@@ -167,7 +167,7 @@ new #[Layout('layouts.app')] class extends Component
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">Nenhum convênio encontrado.</td></tr>
+                    <tr><td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">{{ __('Nenhum convênio encontrado.') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -183,7 +183,7 @@ new #[Layout('layouts.app')] class extends Component
             <div class="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700">
                     <h2 class="text-base font-semibold text-slate-800 dark:text-slate-100">
-                        {{ $editingId ? 'Editar convênio' : 'Novo convênio' }}
+                        {{ $editingId ? __('Editar convênio') : __('Novo convênio') }}
                     </h2>
                     <button wire:click="closeForm" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
                         <x-heroicon-o-x-mark class="w-4 h-4 text-slate-500" />
@@ -191,7 +191,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Nome</label>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Nome') }}</label>
                         <input wire:model="formName" type="text" class="input" />
                         @error('formName')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
@@ -212,9 +212,9 @@ new #[Layout('layouts.app')] class extends Component
                     @endif
                 </div>
                 <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-700">
-                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">Cancelar</button>
+                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">{{ __('Cancelar') }}</button>
                     <button wire:click="save" wire:loading.attr="disabled" class="btn-primary px-4 py-2 text-sm">
-                        <span wire:loading.remove>Salvar</span><span wire:loading>Salvando...</span>
+                        <span wire:loading.remove>{{ __('Salvar') }}</span><span wire:loading>{{ __('Salvando...') }}</span>
                     </button>
                 </div>
             </div>

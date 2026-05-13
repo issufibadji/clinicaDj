@@ -22,7 +22,9 @@ class MenuItemSeeder extends Seeder
             ['label' => 'Convênios',           'route' => 'insurance.index',     'icon' => 'heroicon-o-shield-check',        'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 9],
             ['label' => 'Eventos',             'route' => 'events.index',        'icon' => 'heroicon-o-calendar',            'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 10],
             ['label' => 'Chat',                'route' => 'chat.index',          'icon' => 'heroicon-o-chat-bubble-left-right', 'group' => 'Hospital',        'min_level' => 4, 'is_visible' => true,  'order' => 11],
+            ['label' => 'Notificações',        'route' => 'notifications.index', 'icon' => 'heroicon-o-bell',                 'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 12],
             // ─── Controle de Acesso ────────────────────────────────────────
+            ['label' => 'Notificações',        'route' => 'admin.notificacoes.index', 'icon' => 'heroicon-o-bell-alert',      'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 0],
             ['label' => 'Usuários',            'route' => 'admin.usuarios.index',     'icon' => 'heroicon-o-user-group',      'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 1],
             ['label' => 'Papéis',              'route' => 'admin.papeis.index',       'icon' => 'heroicon-o-identification',  'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 2],
             ['label' => 'Permissões',          'route' => 'admin.permissoes.index',   'icon' => 'heroicon-o-key',             'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 3],

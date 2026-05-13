@@ -19,13 +19,13 @@ new class extends Component
 <div class="card h-full flex flex-col">
     <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
         <x-heroicon-o-user-circle class="w-4 h-4 text-amber-500" />
-        Médicos Disponíveis
+        {{ __('Médicos Disponíveis') }}
     </h2>
 
     @if($doctors->isEmpty())
         <div class="flex-1 flex flex-col items-center justify-center text-center py-6">
             <x-heroicon-o-user-circle class="w-10 h-10 text-slate-300 dark:text-slate-600 mb-2" />
-            <p class="text-sm text-slate-400">Nenhum médico disponível.</p>
+            <p class="text-sm text-slate-400">{{ __('Nenhum médico disponível.') }}</p>
         </div>
     @else
         <div class="flex-1" x-data="{ current: 0, total: {{ $doctors->count() }} }">
@@ -46,7 +46,7 @@ new class extends Component
                     </div>
                     <span class="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        Disponível
+                        {{ __('Disponível') }}
                     </span>
                 </div>
             @endforeach

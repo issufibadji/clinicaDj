@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Actions\Clinica\Payments\CreatePaymentAction;
 use App\Actions\Clinica\Payments\DeletePaymentAction;
@@ -81,10 +81,10 @@ new #[Layout('layouts.app')] class extends Component
         if ($this->editingId) {
             $pay = Payment::findOrFail($this->editingId);
             app(UpdatePaymentAction::class)->handle($pay, $amount, $this->formMethod, $this->formStatus);
-            $msg = 'Pagamento atualizado.';
+            $msg = __('Pagamento atualizado.');
         } else {
             app(CreatePaymentAction::class)->handle($this->formAppointmentId, $amount, $this->formMethod, $this->formStatus, null);
-            $msg = 'Pagamento registrado.';
+            $msg = __('Pagamento registrado.');
         }
 
         $this->showForm = false;
@@ -98,7 +98,7 @@ new #[Layout('layouts.app')] class extends Component
         $pay = Payment::findOrFail($this->confirmId);
         try {
             app(DeletePaymentAction::class)->handle($pay);
-            session()->flash('success', 'Pagamento excluído.');
+            session()->flash('success', __('Pagamento excluído.'));
         } catch (\Illuminate\Validation\ValidationException $e) {
             session()->flash('error', $e->errors()['payment'][0]);
         }
@@ -135,12 +135,12 @@ new #[Layout('layouts.app')] class extends Component
 <div>
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Pagamentos</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Controle de pagamentos de consultas.</p>
+            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ __('Pagamentos') }}</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Controle de pagamentos de consultas.') }}</p>
         </div>
         @can('create', \App\Models\Payment::class)
             <button wire:click="openCreate" class="btn-primary flex items-center gap-2 px-4 py-2 text-sm">
-                <x-heroicon-o-plus class="w-4 h-4" />Novo pagamento
+                <x-heroicon-o-plus class="w-4 h-4" />{{ __('Novo pagamento') }}
             </button>
         @endcan
     </div>
@@ -158,7 +158,7 @@ new #[Layout('layouts.app')] class extends Component
 
     <div class="card mb-4 flex flex-wrap gap-3">
         <select wire:model.live="filterStatus" class="input w-40">
-            <option value="">Todos os status</option>
+            <option value="">{{ __('Todos os status') }}</option>
             @foreach($statusLabels as $key => $label)
                 <option value="{{ $key }}">{{ $label }}</option>
             @endforeach
@@ -170,11 +170,11 @@ new #[Layout('layouts.app')] class extends Component
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60">
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Paciente</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Médico</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Método</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Valor</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Paciente') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Médico') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Método') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Valor') }}</th>
                     <th class="px-5 py-3 w-24"></th>
                 </tr>
             </thead>
@@ -183,10 +183,10 @@ new #[Layout('layouts.app')] class extends Component
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                         <td class="px-5 py-3.5 text-slate-800 dark:text-slate-100">{{ $pay->appointment->patient->name }}</td>
                         <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">{{ $pay->appointment->doctor->user->name }}</td>
-                        <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">{{ $methodLabels[$pay->method] ?? $pay->method }}</td>
+                        <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">{{ __($methodLabels[$pay->method] ?? $pay->method) }}</td>
                         <td class="px-5 py-3.5">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $statusColors[$pay->status] ?? '' }}">
-                                {{ $statusLabels[$pay->status] ?? $pay->status }}
+                                {{ __($statusLabels[$pay->status] ?? $pay->status) }}
                             </span>
                         </td>
                         <td class="px-5 py-3.5 text-right font-medium text-emerald-600 dark:text-emerald-400">
@@ -202,9 +202,9 @@ new #[Layout('layouts.app')] class extends Component
                                 @can('delete', $pay)
                                     @if($confirmId === $pay->id)
                                         <div class="flex items-center gap-1.5">
-                                            <span class="text-xs text-slate-500">Confirmar?</span>
-                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">Sim</button>
-                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">Não</button>
+                                            <span class="text-xs text-slate-500">{{ __('Confirmar?') }}</span>
+                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">{{ __('Sim') }}</button>
+                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">{{ __('Não') }}</button>
                                         </div>
                                     @else
                                         <button wire:click="confirmDelete('{{ $pay->id }}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
@@ -216,7 +216,7 @@ new #[Layout('layouts.app')] class extends Component
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">Nenhum pagamento encontrado.</td></tr>
+                    <tr><td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">{{ __('Nenhum pagamento encontrado.') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -232,7 +232,7 @@ new #[Layout('layouts.app')] class extends Component
             <div class="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700">
                     <h2 class="text-base font-semibold text-slate-800 dark:text-slate-100">
-                        {{ $editingId ? 'Editar pagamento' : 'Novo pagamento' }}
+                        {{ $editingId ? __('Editar pagamento') : __('Novo pagamento') }}
                     </h2>
                     <button wire:click="closeForm" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
                         <x-heroicon-o-x-mark class="w-4 h-4 text-slate-500" />
@@ -240,7 +240,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Agendamento</label>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Agendamento') }}</label>
                         <select wire:model="formAppointmentId" class="input" {{ $editingId ? 'disabled' : '' }}>
                             <option value="">— Selecione —</option>
                             @foreach($appointments as $ap)
@@ -250,13 +250,13 @@ new #[Layout('layouts.app')] class extends Component
                         @error('formAppointmentId')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Valor (R$)</label>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Valor (R$)') }}</label>
                         <input wire:model="formAmount" type="text" placeholder="0,00" class="input" />
                         @error('formAmount')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Método</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Método') }}</label>
                             <select wire:model="formMethod" class="input">
                                 @foreach($methodLabels as $key => $label)
                                     <option value="{{ $key }}">{{ $label }}</option>
@@ -264,7 +264,7 @@ new #[Layout('layouts.app')] class extends Component
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Status') }}</label>
                             <select wire:model="formStatus" class="input">
                                 @foreach($statusLabels as $key => $label)
                                     <option value="{{ $key }}">{{ $label }}</option>
@@ -274,9 +274,9 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
                 </div>
                 <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-700">
-                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">Cancelar</button>
+                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">{{ __('Cancelar') }}</button>
                     <button wire:click="save" wire:loading.attr="disabled" class="btn-primary px-4 py-2 text-sm">
-                        <span wire:loading.remove>Salvar</span><span wire:loading>Salvando...</span>
+                        <span wire:loading.remove>{{ __('Salvar') }}</span><span wire:loading>{{ __('Salvando...') }}</span>
                     </button>
                 </div>
             </div>

@@ -26,7 +26,7 @@ new #[Layout('layouts.app')] class extends Component
         @endif
         <div>
             <h1 class="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Bem-vindo, {{ $user->name }}!
+                {{ __('Bem-vindo, :name!', ['name' => $user->name]) }}
             </h1>
             <p class="text-sm text-slate-500 dark:text-slate-400">
                 {{ now()->translatedFormat('l, j \d\e F \d\e Y') }}

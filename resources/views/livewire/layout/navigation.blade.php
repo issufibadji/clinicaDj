@@ -76,28 +76,28 @@ new class extends Component {
                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
                       hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-user-circle class="w-4 h-4 text-slate-400" />
-                Meu Perfil
+                {{ __('Meu Perfil') }}
             </a>
 
             <a href="{{ route('profile.settings') }}" wire:navigate @click="open = false"
                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
                       hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-cog-6-tooth class="w-4 h-4 text-slate-400" />
-                Configurações
+                {{ __('Configurações') }}
             </a>
 
             <a href="{{ route('profile.settings', ['tab' => 'security']) }}" wire:navigate @click="open = false"
                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
                       hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-lock-closed class="w-4 h-4 text-slate-400" />
-                Segurança
+                {{ __('Segurança') }}
             </a>
 
             <a href="{{ route('profile.settings', ['tab' => '2fa']) }}" wire:navigate @click="open = false"
                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
                       hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-shield-check class="w-4 h-4 text-slate-400" />
-                <span class="flex-1">Dois Fatores</span>
+                <span class="flex-1">{{ __('Dois Fatores') }}</span>
                 @if(auth()->user()->hasTwoFactorEnabled())
                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 @endif
@@ -117,8 +117,8 @@ new class extends Component {
                            hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-sun class="w-4 h-4 text-slate-400 dark:hidden" />
                 <x-heroicon-o-moon class="w-4 h-4 text-slate-400 hidden dark:block" />
-                <span class="dark:hidden">Modo escuro</span>
-                <span class="hidden dark:block">Modo claro</span>
+                <span class="dark:hidden">{{ __('Modo escuro') }}</span>
+                <span class="hidden dark:block">{{ __('Modo claro') }}</span>
             </button>
         </div>
 
@@ -128,7 +128,7 @@ new class extends Component {
                     class="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400
                            hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                 <x-heroicon-o-arrow-right-on-rectangle class="w-4 h-4" />
-                Sair
+                {{ __('Sair') }}
             </button>
         </div>
     </div>

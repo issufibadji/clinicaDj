@@ -32,7 +32,7 @@ new class extends Component
             <x-heroicon-o-calendar-days class="w-6 h-6 text-primary-600 dark:text-primary-400" />
         </div>
         <div class="min-w-0">
-            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Consultas Hoje</p>
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('Consultas Hoje') }}</p>
             <p class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">{{ $appointmentsToday }}</p>
         </div>
     </div>
@@ -42,7 +42,7 @@ new class extends Component
             <x-heroicon-o-users class="w-6 h-6 text-blue-600 dark:text-blue-400" />
         </div>
         <div class="min-w-0">
-            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Novos Pacientes (mês)</p>
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('Novos Pacientes (mês)') }}</p>
             <p class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">{{ $patientsThisMonth }}</p>
         </div>
     </div>
@@ -52,7 +52,7 @@ new class extends Component
             <x-heroicon-o-user-circle class="w-6 h-6 text-amber-600 dark:text-amber-400" />
         </div>
         <div class="min-w-0">
-            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Médicos Disponíveis</p>
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('Médicos Disponíveis') }}</p>
             <p class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">{{ $availableDoctors }}</p>
         </div>
     </div>
@@ -62,7 +62,7 @@ new class extends Component
             <x-heroicon-o-banknotes class="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
         </div>
         <div class="min-w-0">
-            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Receita do Dia</p>
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('Receita do Dia') }}</p>
             <p class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">
                 R$ {{ number_format($revenueToday, 2, ',', '.') }}
             </p>

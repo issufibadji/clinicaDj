@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Actions\Clinica\Doctors\CreateDoctorAction;
 use App\Actions\Clinica\Doctors\DeleteDoctorAction;
@@ -112,12 +112,12 @@ new #[Layout('layouts.app')] class extends Component
 <div>
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Médicos</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Gerencie o corpo clínico da instituição.</p>
+            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ __('Médicos') }}</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Gerencie o corpo clínico da instituição.') }}</p>
         </div>
         @can('create', \App\Models\Doctor::class)
             <button wire:click="openCreate" class="btn-primary flex items-center gap-2 px-4 py-2 text-sm">
-                <x-heroicon-o-plus class="w-4 h-4" />Novo médico
+                <x-heroicon-o-plus class="w-4 h-4" />{{ __('Novo médico') }}
             </button>
         @endcan
     </div>
@@ -134,19 +134,19 @@ new #[Layout('layouts.app')] class extends Component
     @endif
 
     <div class="card mb-4">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Buscar por nome, CRM ou especialidade..." class="input" />
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="{{ __('Buscar por nome, CRM ou especialidade...') }}" class="input" />
     </div>
 
     <div class="card p-0 overflow-hidden">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60">
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Médico</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">CRM</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Especialidade</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Dept.</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Consultas</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Disponível</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Médico') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('CRM') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Especialidade') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Dept.') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Consultas') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Disponível') }}</th>
                     <th class="px-5 py-3 w-24"></th>
                 </tr>
             </thead>
@@ -168,7 +168,7 @@ new #[Layout('layouts.app')] class extends Component
                         <td class="px-5 py-3.5">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
                                 {{ $doc->is_available ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' }}">
-                                {{ $doc->is_available ? 'Sim' : 'Não' }}
+                                {{ $doc->is_available ? __('Sim') : __('Não') }}
                             </span>
                         </td>
                         <td class="px-5 py-3.5 text-right">
@@ -181,9 +181,9 @@ new #[Layout('layouts.app')] class extends Component
                                 @can('delete', $doc)
                                     @if($confirmId === $doc->id)
                                         <div class="flex items-center gap-1.5">
-                                            <span class="text-xs text-slate-500">Confirmar?</span>
-                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">Sim</button>
-                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">Não</button>
+                                            <span class="text-xs text-slate-500">{{ __('Confirmar?') }}</span>
+                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">{{ __('Sim') }}</button>
+                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">{{ __('Não') }}</button>
                                         </div>
                                     @else
                                         <button wire:click="confirmDelete('{{ $doc->id }}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
@@ -195,7 +195,7 @@ new #[Layout('layouts.app')] class extends Component
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="px-5 py-12 text-center text-sm text-slate-400">Nenhum médico encontrado.</td></tr>
+                    <tr><td colspan="7" class="px-5 py-12 text-center text-sm text-slate-400">{{ __('Nenhum médico encontrado.') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -211,7 +211,7 @@ new #[Layout('layouts.app')] class extends Component
             <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700">
                     <h2 class="text-base font-semibold text-slate-800 dark:text-slate-100">
-                        {{ $editingId ? 'Editar médico' : 'Novo médico' }}
+                        {{ $editingId ? __('Editar médico') : __('Novo médico') }}
                     </h2>
                     <button wire:click="closeForm" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
                         <x-heroicon-o-x-mark class="w-4 h-4 text-slate-500" />
@@ -220,7 +220,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="p-6 space-y-4">
                     @if(! $editingId)
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Usuário</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Usuário') }}</label>
                             <select wire:model="formUserId" class="input">
                                 <option value="">— Selecione —</option>
                                 @foreach($users as $u)
@@ -232,18 +232,18 @@ new #[Layout('layouts.app')] class extends Component
                     @endif
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Especialidade</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Especialidade') }}</label>
                             <input wire:model="formSpecialty" type="text" class="input" />
                             @error('formSpecialty')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">CRM</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('CRM') }}</label>
                             <input wire:model="formCrm" type="text" class="input" />
                             @error('formCrm')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Departamento</label>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Departamento') }}</label>
                         <select wire:model="formDepartmentId" class="input">
                             <option value="">— Nenhum —</option>
                             @foreach($departments as $dep)
@@ -254,14 +254,14 @@ new #[Layout('layouts.app')] class extends Component
                     @if($editingId)
                         <label class="flex items-center gap-3 cursor-pointer">
                             <input type="checkbox" wire:model="formIsAvailable" class="w-4 h-4 rounded text-primary-600" />
-                            <span class="text-sm text-slate-700 dark:text-slate-300">Disponível para consultas</span>
+                            <span class="text-sm text-slate-700 dark:text-slate-300">{{ __('Disponível para consultas') }}</span>
                         </label>
                     @endif
                 </div>
                 <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-700">
-                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">Cancelar</button>
+                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">{{ __('Cancelar') }}</button>
                     <button wire:click="save" wire:loading.attr="disabled" class="btn-primary px-4 py-2 text-sm">
-                        <span wire:loading.remove>Salvar</span><span wire:loading>Salvando...</span>
+                        <span wire:loading.remove>{{ __('Salvar') }}</span><span wire:loading>{{ __('Salvando...') }}</span>
                     </button>
                 </div>
             </div>

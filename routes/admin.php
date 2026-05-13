@@ -24,4 +24,9 @@ Route::middleware(['auth', 'check2fa'])->prefix('admin')->name('admin.')->group(
     Volt::route('vinculo', 'admin.user-roles.user-role-assignment')
         ->middleware('permission:users.assign_roles')
         ->name('vinculo.index');
+
+    // Notificações administrativas
+    Volt::route('notificacoes', 'admin.notifications.notification-manager')
+        ->middleware('role:admin|super-admin')
+        ->name('notificacoes.index');
 });

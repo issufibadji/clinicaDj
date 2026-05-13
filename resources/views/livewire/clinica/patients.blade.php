@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Actions\Clinica\Patients\CreatePatientAction;
 use App\Actions\Clinica\Patients\DeletePatientAction;
@@ -110,12 +110,12 @@ new #[Layout('layouts.app')] class extends Component
 <div>
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Pacientes</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Cadastro de pacientes da clínica.</p>
+            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ __('Pacientes') }}</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Cadastro de pacientes da clínica.') }}</p>
         </div>
         @can('create', \App\Models\Patient::class)
             <button wire:click="openCreate" class="btn-primary flex items-center gap-2 px-4 py-2 text-sm">
-                <x-heroicon-o-plus class="w-4 h-4" />Novo paciente
+                <x-heroicon-o-plus class="w-4 h-4" />{{ __('Novo paciente') }}
             </button>
         @endcan
     </div>
@@ -132,18 +132,18 @@ new #[Layout('layouts.app')] class extends Component
     @endif
 
     <div class="card mb-4">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Buscar por nome, CPF ou telefone..." class="input" />
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="{{ __('Buscar por nome, CPF ou telefone...') }}" class="input" />
     </div>
 
     <div class="card p-0 overflow-hidden">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60">
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nome</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">CPF</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nascimento</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Convênio</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Consultas</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Nome') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('CPF') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Nascimento') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Convênio') }}</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Consultas') }}</th>
                     <th class="px-5 py-3 w-24"></th>
                 </tr>
             </thead>
@@ -157,7 +157,7 @@ new #[Layout('layouts.app')] class extends Component
                         <td class="px-5 py-3.5 font-mono text-slate-500 dark:text-slate-400">{{ $p->cpf }}</td>
                         <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">
                             {{ $p->birth_date->format('d/m/Y') }}
-                            <span class="text-xs text-slate-400">({{ $p->age() }} anos)</span>
+                            <span class="text-xs text-slate-400">({{ $p->age() }} {{ __('anos') }})</span>
                         </td>
                         <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">{{ $p->insurance?->name ?? '—' }}</td>
                         <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">{{ $p->appointments_count }}</td>
@@ -171,9 +171,9 @@ new #[Layout('layouts.app')] class extends Component
                                 @can('delete', $p)
                                     @if($confirmId === $p->id)
                                         <div class="flex items-center gap-1.5">
-                                            <span class="text-xs text-slate-500">Confirmar?</span>
-                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">Sim</button>
-                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">Não</button>
+                                            <span class="text-xs text-slate-500">{{ __('Confirmar?') }}</span>
+                                            <button wire:click="delete" class="text-xs text-red-600 hover:underline font-medium">{{ __('Sim') }}</button>
+                                            <button wire:click="$set('confirmId', null)" class="text-xs text-slate-500 hover:underline">{{ __('Não') }}</button>
                                         </div>
                                     @else
                                         <button wire:click="confirmDelete('{{ $p->id }}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
@@ -185,7 +185,7 @@ new #[Layout('layouts.app')] class extends Component
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">Nenhum paciente encontrado.</td></tr>
+                    <tr><td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">{{ __('Nenhum paciente encontrado.') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -201,7 +201,7 @@ new #[Layout('layouts.app')] class extends Component
             <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[90vh] flex flex-col">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex-shrink-0">
                     <h2 class="text-base font-semibold text-slate-800 dark:text-slate-100">
-                        {{ $editingId ? 'Editar paciente' : 'Novo paciente' }}
+                        {{ $editingId ? __('Editar paciente') : __('Novo paciente') }}
                     </h2>
                     <button wire:click="closeForm" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
                         <x-heroicon-o-x-mark class="w-4 h-4 text-slate-500" />
@@ -209,36 +209,36 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
                 <div class="overflow-y-auto flex-1 p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Nome completo</label>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Nome completo') }}</label>
                         <input wire:model="formName" type="text" class="input" />
                         @error('formName')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">CPF</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('CPF') }}</label>
                             <input wire:model="formCpf" type="text" placeholder="000.000.000-00" class="input" maxlength="14" />
                             @error('formCpf')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Data de nascimento</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Data de nascimento') }}</label>
                             <input wire:model="formBirthDate" type="date" class="input" />
                             @error('formBirthDate')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Telefone</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Telefone') }}</label>
                             <input wire:model="formPhone" type="text" placeholder="(11) 99999-9999" class="input" />
                             @error('formPhone')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">E-mail</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('E-mail') }}</label>
                             <input wire:model="formEmail" type="email" class="input" />
                             @error('formEmail')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Convênio</label>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{{ __('Convênio') }}</label>
                         <select wire:model="formInsuranceId" class="input">
                             <option value="">— Particular —</option>
                             @foreach($insurances as $ins)
@@ -248,9 +248,9 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
                 </div>
                 <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex-shrink-0">
-                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">Cancelar</button>
+                    <button wire:click="closeForm" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">{{ __('Cancelar') }}</button>
                     <button wire:click="save" wire:loading.attr="disabled" class="btn-primary px-4 py-2 text-sm">
-                        <span wire:loading.remove>Salvar</span><span wire:loading>Salvando...</span>
+                        <span wire:loading.remove>{{ __('Salvar') }}</span><span wire:loading>{{ __('Salvando...') }}</span>
                     </button>
                 </div>
             </div>

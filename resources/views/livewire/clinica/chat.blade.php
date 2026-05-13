@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Actions\Clinica\Chat\SendMessageAction;
 use App\Models\ChatMessage;
@@ -119,7 +119,7 @@ new #[Layout('layouts.app')] class extends Component
                 </button>
             @empty
                 <div class="px-4 py-8 text-center text-xs text-slate-400">
-                    Nenhum usuário disponível.
+                    {{ __('Nenhum usuário disponível.') }}
                 </div>
             @endforelse
         </div>
@@ -169,7 +169,7 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
                 @empty
                     <div class="flex items-center justify-center h-full text-sm text-slate-400">
-                        Nenhuma mensagem ainda. Diga olá!
+                        {{ __('Nenhuma mensagem ainda.') }} Diga olá!
                     </div>
                 @endforelse
             </div>
