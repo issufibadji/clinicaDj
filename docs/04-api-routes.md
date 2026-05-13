@@ -101,11 +101,49 @@ Middleware base: `web`
 | GET | `/chat` | `Chat\ChatWindow` | `auth,verified` | `chat.index` | Chat geral |
 | GET | `/chat/{user}` | `Chat\ChatWindow` | `auth,verified` | `chat.conversation` | Conversa específica |
 
+### Notifications (página do usuário)
+
+Arquivo: `routes/modules.php`
+
+| Método | URI | Componente Livewire | Middleware | Named Route | Descrição |
+|--------|-----|---------------------|-----------|------------|-----------|
+| GET | `/notificacoes` | `clinica.notifications` | `auth,verified,check2fa` | `notifications.index` | Lista paginada de notificações do usuário autenticado — filtros all/unread/read, marcar lida, excluir |
+
 ### Profile
 
 | Método | URI | Componente Livewire | Middleware | Named Route | Descrição |
 |--------|-----|---------------------|-----------|------------|-----------|
 | GET | `/profile` | `Profile\Edit` | `auth,verified` | `profile.edit` | Editar perfil |
+
+### Push Subscriptions
+
+Arquivo: `routes/web.php`
+
+| Método | URI | Controller | Middleware | Named Route | Descrição |
+|--------|-----|------------|-----------|------------|-----------|
+| POST | `/push-subscriptions` | `PushSubscriptionController@store` | `auth,check2fa` | `push-subscriptions.store` | Registra ou atualiza subscription Web Push do dispositivo atual (endpoint único) |
+
+**Request body:**
+```json
+{
+    "endpoint":         "https://fcm.googleapis.com/...",
+    "p256dh_key":       "BNcRdreA...",
+    "auth_key":         "tBHItJI5...",
+    "content_encoding": "aes128gcm"
+}
+```
+
+**Response `200 OK`:** `{"ok": true}`
+
+---
+
+### Admin — Notification Manager
+
+Arquivo: `routes/admin.php`
+
+| Método | URI | Componente Livewire | Middleware | Named Route | Descrição |
+|--------|-----|---------------------|-----------|------------|-----------|
+| GET | `/admin/notificacoes` | `admin.notifications.notification-manager` | `auth,check2fa,role:admin` | `admin.notificacoes.index` | Envio manual de notificações (internal/webpush/both) com histórico de envios agrupados por batch_id |
 
 ---
 
@@ -480,4 +518,9 @@ route('events.index')                     // /events
 route('chat.index')                       // /chat
 route('chat.conversation', $user)        // /chat/{user}
 route('profile.edit')                     // /profile
+route('notifications.index')             // /notificacoes
+route('push-subscriptions.store')        // POST /push-subscriptions
+
+// Admin
+route('admin.notificacoes.index')        // /admin/notificacoes
 ```

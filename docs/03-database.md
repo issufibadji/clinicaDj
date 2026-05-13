@@ -341,18 +341,58 @@
 
 ## 12. Tabela: `notifications`
 
+Tabela nativa do Laravel para o canal `database` de notificações. Gerada pela migration `2026_05_13_200000`.
+
 | Coluna | Tipo | Nullable | Default | Índice | Descrição |
 |--------|------|----------|---------|--------|-----------|
-| id | uuid | não | uuid() | PK | |
-| user_id | uuid | não | — | FK, INDEX | Destinatário |
-| type | varchar(100) | não | — | INDEX | Classe da notificação (FQCN) |
-| title | varchar(255) | não | — | — | Título exibido no sino |
-| body | text | sim | null | — | Corpo da notificação |
-| data | json | não | '{}' | — | Payload extra (ex: IDs relacionados) |
+| id | uuid (char 36) | não | uuid() | PK | UUID gerado pela notification class |
+| type | varchar(255) | não | — | INDEX | FQCN da classe (ex: `App\Notifications\ManualNotification`) |
+| notifiable_type | varchar(255) | não | — | INDEX | Classe do destinatário (`App\Models\User`) |
+| notifiable_id | char(36) | não | — | INDEX | UUID do destinatário — **char(36)** via `uuidMorphs()` |
+| data | json | não | — | — | Payload: `type`, `batch_id`, `icon`, `color`, `title`, `body`, `url` |
 | read_at | timestamp | sim | null | INDEX | Quando foi lida (null = não lida) |
 | created_at | timestamp | não | now() | INDEX | |
+| updated_at | timestamp | não | now() | — | |
 
-**Nota:** Esta é a tabela nativa do Laravel para database notifications (usada por `notifiable`). Compatível com `User::notifications()`.
+**Índice composto:** `(notifiable_type, notifiable_id, read_at)` para notificações não lidas por usuário.
+
+**Nota crítica:** `notifiable_id` é `char(36)` via `$table->uuidMorphs('notifiable')`. Usar `$table->morphs()` (BIGINT padrão) causa `SQLSTATE[22003]: Numeric value out of range` ao tentar salvar um UUID.
+
+**Estrutura do campo `data` (JSON):**
+```json
+{
+    "type":     "manual | appointment_created | appointment_status_changed | new_payment",
+    "batch_id": "uuid-v4 (apenas ManualNotification)",
+    "icon":     "bell | calendar | banknotes | information-circle | exclamation-triangle",
+    "color":    "blue | green | red | slate | amber",
+    "title":    "Título da notificação",
+    "body":     "Texto do corpo",
+    "url":      "/rota-destino"
+}
+```
+
+**Relacionamentos (via Eloquent):**
+- `User::notifications()` — via trait `Notifiable` (polimórfico)
+
+**Soft delete:** não  
+**Auditoria:** não
+
+---
+
+## 13. Tabela: `push_subscriptions`
+
+Armazena subscriptions Web Push (VAPID) por dispositivo/browser. Gerada pela migration `2026_05_13_200100`.
+
+| Coluna | Tipo | Nullable | Default | Índice | Descrição |
+|--------|------|----------|---------|--------|-----------|
+| id | bigint unsigned | não | auto | PK | |
+| user_id | char(36) | não | — | FK, INDEX | UUID do usuário |
+| endpoint | text | não | — | UNIQUE | URL do push service do browser |
+| p256dh_key | text | sim | null | — | Chave pública P-256 (para cifragem) |
+| auth_key | text | sim | null | — | Segredo de autenticação da subscription |
+| content_encoding | varchar(10) | não | 'aes128gcm' | — | `aes128gcm` (Chrome/Edge) ou `aesgcm` (Firefox legado) |
+| created_at | timestamp | não | now() | — | |
+| updated_at | timestamp | não | now() | — | |
 
 **Relacionamentos:**
 - belongsTo User
@@ -362,7 +402,7 @@
 
 ---
 
-## 13. Tabelas do Spatie Laravel Permission
+## 14. Tabelas do Spatie Laravel Permission
 
 Criadas automaticamente pela migration do pacote. Não editar manualmente.
 
@@ -399,7 +439,7 @@ Criadas automaticamente pela migration do pacote. Não editar manualmente.
 
 ---
 
-## 14. Tabela: `audits` (owen-it/laravel-auditing)
+## 15. Tabela: `audits` (owen-it/laravel-auditing)
 
 Criada automaticamente. Não editar manualmente.
 

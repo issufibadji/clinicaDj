@@ -358,14 +358,59 @@
 
 ---
 
-## FASE 16 — Produção
+## FASE 16 — Notificações e Web Push
+
+| # | Item | Status | Observação |
+|---|------|--------|------------|
+| 16.1 | Migration `notifications` com `uuidMorphs` | ✅ | `2026_05_13_200000` — `uuidMorphs('notifiable')` + índice composto `(notifiable_type, notifiable_id, read_at)` |
+| 16.2 | Migration `push_subscriptions` | ✅ | `2026_05_13_200100` — `user_id char(36)`, `endpoint text unique`, `p256dh_key`, `auth_key`, `content_encoding` |
+| 16.3 | Model `PushSubscription` | ✅ | `app/Models/PushSubscription.php` — `belongsTo User` |
+| 16.4 | Trait `Notifiable` + `pushSubscriptions()` + `pushNotify()` no model `User` | ✅ | `pushNotify()` usa `minishlink/web-push` v10 com VAPID; remove subscriptions expiradas |
+| 16.5 | Notification `AppointmentCreatedNotification` | ✅ | Canal `database`; disparada via `CreateAppointmentAction`; notifica admins + médico da consulta |
+| 16.6 | Notification `AppointmentStatusChangedNotification` | ✅ | Canal `database`; disparada via `UpdateAppointmentAction` quando status muda; cores dinâmicas por status |
+| 16.7 | Notification `NewPaymentNotification` | ✅ | Canal `database`; disparada via `CreatePaymentAction` quando `status=paid`; notifica admins |
+| 16.8 | Notification `ManualNotification` | ✅ | Canal `database`; `batch_id` UUID para agrupamento; `webPushPayload()` helper para push direto |
+| 16.9 | Livewire `notification-panel` (sino na topbar) | ✅ | `resources/views/livewire/notifications/notification-panel.blade.php` — badge ≤9/9+, `wire:poll.30s`, marcar lida, excluir |
+| 16.10 | Livewire `clinica.notifications` (página full-page) | ✅ | `GET /notificacoes` → `notifications.index` — filtro all/unread/read, paginação 20, marcar tudo, excluir tudo |
+| 16.11 | Livewire `admin.notifications.notification-manager` | ✅ | `GET /admin/notificacoes` → `admin.notificacoes.index` — envio manual (internal/webpush/both), histórico por batch com contagem lidas |
+| 16.12 | `PushSubscriptionController::store()` | ✅ | `POST /push-subscriptions` — valida e faz `updateOrCreate` da subscription por endpoint |
+| 16.13 | `public/service-worker.js` | ✅ | Recebe evento `push`, exibe notificação; `notificationclick` foca ou abre janela na URL do payload |
+| 16.14 | `resources/js/app.js` — `registerPush()` | ✅ | Regista SW, solicita permissão, detecta `contentEncoding` (aesgcm fallback Firefox), POST para `/push-subscriptions` |
+| 16.15 | VAPID keys + `config/services.php` `webpush` block | ✅ | `.env`: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`; `<meta name="vapid-public-key">` no layout |
+| 16.16 | Menu items: Notificações (Hospital) + Notificações (Controle de Acesso) | ✅ | `MenuItemSeeder` — `notifications.index` (min_level=4) e `admin.notificacoes.index` (min_level=1) |
+| 16.17 | Topbar substitui botão estático por `<livewire:notifications.notification-panel />` | ✅ | `resources/views/partials/topbar.blade.php` |
+
+**Artefatos criados:**
+
+- `database/migrations/2026_05_13_200000_create_notifications_table.php`
+- `database/migrations/2026_05_13_200100_create_push_subscriptions_table.php`
+- `app/Models/PushSubscription.php`
+- `app/Notifications/AppointmentCreatedNotification.php`
+- `app/Notifications/AppointmentStatusChangedNotification.php`
+- `app/Notifications/NewPaymentNotification.php`
+- `app/Notifications/ManualNotification.php`
+- `app/Http/Controllers/PushSubscriptionController.php`
+- `resources/views/livewire/notifications/notification-panel.blade.php`
+- `resources/views/livewire/clinica/notifications.blade.php`
+- `resources/views/livewire/admin/notifications/notification-manager.blade.php`
+- `public/service-worker.js`
+
+**Bug corrigido nesta fase:**
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `SQLSTATE[22003]: Numeric value out of range` ao enviar notificação | `$table->morphs('notifiable')` cria `notifiable_id` como `unsignedBigInt`, mas `User.id` é UUID (char 36) | Alterado para `$table->uuidMorphs('notifiable')` — migrate:rollback + re-migrate |
+
+---
+
+## FASE 17 — Produção
 
 | # | Item | Status |
 |---|------|--------|
-| 16.1 | `.env` de produção configurado | ⬜ |
-| 16.2 | Otimizações Laravel (`config:cache`, `route:cache`, `view:cache`) | ⬜ |
-| 16.3 | Checklist de segurança concluído | ⬜ |
-| 16.4 | Checklist funcional pré-deploy concluído | ⬜ |
+| 17.1 | `.env` de produção configurado | ⬜ |
+| 17.2 | Otimizações Laravel (`config:cache`, `route:cache`, `view:cache`) | ⬜ |
+| 17.3 | Checklist de segurança concluído | ⬜ |
+| 17.4 | Checklist funcional pré-deploy concluído | ⬜ |
 
 ---
 
@@ -379,6 +424,7 @@
 | 2026-05-12 | Alpine.js carregado duas vezes (app.js + Livewire 3) causava "page expired" | `resources/js/app.js` |
 | 2026-05-12 | `audits.user_id` era `unsignedBigInteger`, truncava UUID do usuário logado | `2026_05_12_200521_create_audits_table.php` |
 | 2026-05-12 | `audits.auditable_id` (`morphs`) era `unsignedBigInteger`, truncava UUID dos models | `2026_05_12_200521_create_audits_table.php` |
+| 2026-05-13 | `notifications.notifiable_id` era `unsignedBigInt` (`morphs`), incompatível com UUID de User | `2026_05_13_200000_create_notifications_table.php` — `uuidMorphs` |
 
 ---
 
@@ -402,10 +448,11 @@
 | FASE 13 — Dashboard | 5 | 5 | 100% 🔧 |
 | FASE 14 — Testes | 6 | 5 | 83% ✅ |
 | FASE 15 — Performance | 6 | 6 | 100% 🔧 |
-| FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **170** | **97%** |
+| FASE 16 — Notificações | 17 | 17 | 100% ✅ |
+| FASE 17 — Produção | 4 | 0 | 0% |
+| **TOTAL** | **196** | **191** | **98%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 16 — Produção (otimizações, checklist de segurança e deploy)
+> **Próxima fase a executar:** FASE 17 — Produção (otimizações, checklist de segurança e deploy)

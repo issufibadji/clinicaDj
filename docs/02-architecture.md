@@ -44,13 +44,15 @@ app-clinica-jm/
 │   │   └── PaymentProcessed.php
 │   ├── Http/
 │   │   ├── Controllers/
+│   │   │   ├── PushSubscriptionController.php
 │   │   │   └── Api/
 │   │   │       ├── V1/
 │   │   │       │   ├── AuthController.php
 │   │   │       │   ├── AppointmentController.php
 │   │   │       │   └── PatientController.php
 │   │   ├── Middleware/
-│   │   │   └── CheckPermission.php
+│   │   │   ├── CheckPermission.php
+│   │   │   └── EnsureUserIsActive.php
 │   │   └── Requests/               # Form Requests para toda validação
 │   │       ├── Appointments/
 │   │       │   ├── StoreAppointmentRequest.php
@@ -88,7 +90,7 @@ app-clinica-jm/
 │   │       ├── Sidebar.php
 │   │       └── DarkModeToggle.php
 │   ├── Models/
-│   │   ├── User.php
+│   │   ├── User.php                    # Notifiable trait + pushSubscriptions() + pushNotify()
 │   │   ├── Doctor.php
 │   │   ├── Patient.php
 │   │   ├── Appointment.php
@@ -99,10 +101,14 @@ app-clinica-jm/
 │   │   ├── InsuranceCompany.php
 │   │   ├── Event.php
 │   │   ├── Message.php
-│   │   └── Notification.php
-│   ├── Notifications/              # Laravel Notifications (email, DB)
-│   │   ├── AppointmentConfirmed.php
-│   │   └── AppointmentReminder.php
+│   │   ├── MenuItem.php
+│   │   ├── SystemSetting.php
+│   │   └── PushSubscription.php
+│   ├── Notifications/              # Laravel Notifications (canal database)
+│   │   ├── AppointmentCreatedNotification.php
+│   │   ├── AppointmentStatusChangedNotification.php
+│   │   ├── NewPaymentNotification.php
+│   │   └── ManualNotification.php      # batch_id + webPushPayload() helper
 │   ├── Policies/                   # Autorização por modelo
 │   │   ├── AppointmentPolicy.php
 │   │   ├── DoctorPolicy.php
@@ -148,9 +154,6 @@ app-clinica-jm/
 │       ├── PatientSeeder.php
 │       └── AppointmentSeeder.php
 ├── docs/                           # Esta pasta
-├── public/
-│   ├── index.php
-│   └── build/                      # Assets compilados pelo Vite
 ├── resources/
 │   ├── css/
 │   │   └── app.css                 # @tailwind directives + variáveis CSS
@@ -166,29 +169,48 @@ app-clinica-jm/
 │       │   ├── dashboard/
 │       │   │   ├── stats-cards.blade.php
 │       │   │   ├── doctor-on-duty.blade.php
-│       │   │   ├── survey-chart.blade.php
+│       │   │   ├── appointment-chart.blade.php
 │       │   │   └── mini-calendar.blade.php
-│       │   ├── appointments/
-│       │   ├── doctors/
-│       │   ├── patients/
-│       │   ├── payments/
-│       │   ├── chat/
-│       │   └── shared/
-│       ├── pages/                  # Páginas full-page (Livewire full-page components)
-│       │   ├── dashboard.blade.php
-│       │   ├── appointments/
-│       │   ├── doctors/
-│       │   └── patients/
+│       │   ├── clinica/
+│       │   │   ├── appointments.blade.php
+│       │   │   ├── doctors.blade.php
+│       │   │   ├── patients.blade.php
+│       │   │   ├── payments.blade.php
+│       │   │   ├── expenses.blade.php
+│       │   │   ├── rooms.blade.php
+│       │   │   ├── departments.blade.php
+│       │   │   ├── insurance.blade.php
+│       │   │   ├── events.blade.php
+│       │   │   ├── chat.blade.php
+│       │   │   └── notifications.blade.php     # página /notificacoes
+│       │   ├── notifications/
+│       │   │   └── notification-panel.blade.php  # sino na topbar (wire:poll.30s)
+│       │   ├── admin/
+│       │   │   └── notifications/
+│       │   │       └── notification-manager.blade.php
+│       │   └── layout/
+│       │       └── navigation.blade.php
+│       ├── partials/
+│       │   ├── sidebar.blade.php
+│       │   ├── topbar.blade.php        # inclui <livewire:notifications.notification-panel>
+│       │   └── flash.blade.php
 │       └── components/             # Blade components reutilizáveis
 │           ├── card.blade.php
 │           ├── kpi-card.blade.php
 │           ├── badge.blade.php
 │           ├── modal.blade.php
 │           └── alert.blade.php
+├── public/
+│   ├── index.php
+│   ├── service-worker.js           # Web Push: recebe push event, abre URL no click
+│   └── build/                      # Assets compilados pelo Vite
 ├── routes/
-│   ├── web.php                     # Rotas Livewire (sessão)
+│   ├── web.php                     # Dashboard, perfil, push-subscriptions
+│   ├── admin.php                   # Rotas admin (RBAC, notificações, sistema)
+│   ├── modules.php                 # Módulos clínicos + notificações
 │   ├── api.php                     # Rotas API (Sanctum)
-│   └── auth.php                    # Rotas Breeze
+│   ├── profile.php                 # Perfil/conta Breeze
+│   └── auth.php                    # Rotas Breeze (login, 2FA, etc.)
 ├── storage/
 │   ├── app/
 │   │   └── public/                 # Avatares, documentos
