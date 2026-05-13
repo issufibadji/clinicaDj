@@ -15,6 +15,8 @@ Route::view('profile', 'profile')
 
 // ── Sistema (admin only) ──────────────────────────────────────────────────────
 Route::middleware(['auth', 'check2fa'])->prefix('sistema')->name('admin.sistema.')->group(function () {
+    Volt::route('auditoria', 'admin.system.audit-log')
+        ->name('auditoria');
     Volt::route('menus', 'admin.system.menu-manager')
         ->name('menus');
     Volt::route('configuracoes', 'admin.system.system-settings')

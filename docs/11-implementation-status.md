@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-12 — FASE 8 concluída e homologada
+**Última atualização:** 2026-05-13 — FASE 9 concluída e homologada
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -199,8 +199,8 @@
 |---|------|--------|------------|
 | 9.1 | Tabela `audits` criada | ✅ | |
 | 9.2 | `config/audit.php` configurado (campos sensíveis excluídos) | ✅ | |
-| 9.3 | Livewire `AuditLog` (filtros + paginação + export) | ⬜ | |
-| 9.4 | Modal de diff `old_values` vs `new_values` | ⬜ | |
+| 9.3 | Livewire `AuditLog` (filtros + paginação + export) | ✅ | Rota: `GET /sistema/auditoria` · filtros via `#[Url]` · export JSON |
+| 9.4 | Modal de diff `old_values` vs `new_values` | ✅ | Lado a lado · campos alterados destacados em vermelho/verde |
 
 ---
 
@@ -320,7 +320,7 @@
 | FASE 6 — Seeders | 8 | 8 | 100% |
 | FASE 7 — Menus | 5 | 5 | 100% |
 | FASE 8 — Settings | 4 | 4 | 100% |
-| FASE 9 — Auditoria | 4 | 2 | 50% |
+| FASE 9 — Auditoria | 4 | 4 | 100% |
 | FASE 10 — RBAC CRUD | 4 | 0 | 0% |
 | FASE 11 — Perfil/2FA | 5 | 1 | 20% |
 | FASE 12 — Módulos | 66 | 0 | 0% |
@@ -328,9 +328,9 @@
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **79** | **45%** |
+| **TOTAL** | **175** | **81** | **46%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 9 — Auditoria (Livewire AuditLog com filtros + paginação)
+> **Próxima fase a executar:** FASE 10 — Controle de Acesso CRUD (Permissions, Roles, Users, Vínculo)
