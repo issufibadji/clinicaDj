@@ -42,9 +42,10 @@ new class extends Component
 
         $appointmentDays = Appointment::whereYear('scheduled_at', $this->year)
             ->whereMonth('scheduled_at', $this->month)
-            ->selectRaw('DAY(scheduled_at) as day')
-            ->distinct()
-            ->pluck('day')
+            ->get(['scheduled_at'])
+            ->map(fn($a) => $a->scheduled_at->day)
+            ->unique()
+            ->values()
             ->toArray();
 
         $blanksBefore = $first->dayOfWeek; // 0=Dom

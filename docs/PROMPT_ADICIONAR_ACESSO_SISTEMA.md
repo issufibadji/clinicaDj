@@ -188,7 +188,7 @@ id, key (unique), value, type (boolean/integer/decimal/string), label, descripti
 | allow_patient_registration | boolean | true | Permitir Novos Cadastros |
 | appointment_fee | decimal | 150.00 | Taxa de Consulta (R$) |
 | max_daily_appointments | integer | 20 | Máx. Consultas por Dia |
-| clinic_name | string | Clínica JM | Nome da Clínica |
+| clinic_name | string | Clínica DR.João Mendes | Nome da Clínica |
 | clinic_cnpj | string | — | CNPJ |
 | clinic_phone | string | — | Telefone |
 | clinic_address | string | — | Endereço |

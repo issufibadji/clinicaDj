@@ -85,7 +85,7 @@ Verificar o ambiente local antes de criar o projeto.
   ```
 - [ ] Editar `.env` com as configurações do banco e da aplicação:
   ```
-  APP_NAME="Clínica JM"
+  APP_NAME="Clínica DR.João Mendes"
   APP_URL=http://localhost:8000
   DB_CONNECTION=mysql
   DB_HOST=127.0.0.1
@@ -359,7 +359,7 @@ Executar nesta ordem exata — há dependências entre os seeders.
 
 - [ ] Criar `database/seeders/SystemSettingSeeder.php` com `updateOrCreate` por `key`:
   ```
-  clinic_name           (string)  "Clínica JM"
+  clinic_name           (string)  "Clínica DR.João Mendes"
   clinic_phone          (string)  ""
   clinic_address        (string)  ""
   appointments_per_day  (integer) 20

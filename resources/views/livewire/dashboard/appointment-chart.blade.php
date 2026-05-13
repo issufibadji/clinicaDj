@@ -16,10 +16,10 @@ new class extends Component
     {
         $months = collect(range(5, 0))->map(fn($i) => now()->subMonths($i)->startOfMonth());
 
-        $raw = Appointment::selectRaw("DATE_FORMAT(scheduled_at, '%Y-%m') as ym, COUNT(*) as total")
-            ->where('scheduled_at', '>=', $months->first())
-            ->groupBy('ym')
-            ->pluck('total', 'ym');
+        $raw = Appointment::where('scheduled_at', '>=', $months->first())
+            ->get(['scheduled_at'])
+            ->groupBy(fn($a) => $a->scheduled_at->format('Y-m'))
+            ->map->count();
 
         $abbr = self::$MONTH_ABBR;
 

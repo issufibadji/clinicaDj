@@ -52,7 +52,8 @@ new #[Layout('layouts.app')] class extends Component
     {
         $this->validate([
             'formName'      => ['required', 'string', 'max:100'],
-            'formCpf'       => ['required', 'string', 'size:14'],
+            'formCpf'       => ['required', 'string', 'size:14',
+                                \Illuminate\Validation\Rule::unique('patients', 'cpf')->ignore($this->editingId)],
             'formBirthDate' => ['required', 'date'],
             'formPhone'     => ['required', 'string', 'max:20'],
             'formEmail'     => ['nullable', 'email', 'max:150'],

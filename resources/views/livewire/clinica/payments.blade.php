@@ -113,7 +113,10 @@ new #[Layout('layouts.app')] class extends Component
 
         $payments = Payment::with(['appointment.patient', 'appointment.doctor.user'])
             ->when($this->filterStatus, fn($q) => $q->where('status', $this->filterStatus))
-            ->when($this->filterMonth, fn($q) => $q->whereRaw('DATE_FORMAT(created_at, "%Y-%m") = ?', [$this->filterMonth]))
+            ->when($this->filterMonth, function ($q) {
+                [$y, $m] = explode('-', $this->filterMonth);
+                $q->whereYear('created_at', $y)->whereMonth('created_at', $m);
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Clínica JM') }}</title>
+    <title>{{ config('app.name', 'Clínica DR.João Mendes') }}</title>
 
     <script>
         if (localStorage.getItem('theme') === 'dark' ||
@@ -33,7 +33,7 @@
                 <div class="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center flex-shrink-0">
                     <x-heroicon-o-heart class="w-5 h-5 text-white" />
                 </div>
-                <span class="text-white font-bold text-xl tracking-tight">Clínica JM</span>
+                <span class="text-white font-bold text-xl tracking-tight">Clínica DR.João Mendes</span>
             </div>
 
             {{-- Tagline central --}}
@@ -57,7 +57,7 @@
 
             {{-- Rodapé --}}
             <p class="relative text-slate-500 text-xs">
-                © {{ date('Y') }} Clínica JM · Todos os direitos reservados
+                © {{ date('Y') }} Clínica DR.João Mendes · Todos os direitos reservados
             </p>
         </div>
 
@@ -71,7 +71,7 @@
                         <x-heroicon-o-heart class="w-5 h-5 text-white" />
                     </div>
                     <span class="font-bold text-lg text-slate-800 dark:text-slate-100 tracking-tight">
-                        Clínica JM
+                        Clínica DR.João Mendes
                     </span>
                 </div>
 

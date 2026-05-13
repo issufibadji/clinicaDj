@@ -22,7 +22,7 @@
             <div class="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center flex-shrink-0">
                 <x-heroicon-o-heart class="w-4 h-4 text-white" />
             </div>
-            <span class="text-white font-bold text-[15px] leading-tight tracking-tight">Clínica JM</span>
+            <span class="text-white font-bold text-[15px] leading-tight tracking-tight">Clínica DR.João Mendes</span>
         </div>
     </div>
 

@@ -93,7 +93,10 @@ new #[Layout('layouts.app')] class extends Component
         $expenses = Expense::with('user')
             ->when($this->search, fn($q) => $q->where('description', 'like', "%{$this->search}%")
                 ->orWhere('category', 'like', "%{$this->search}%"))
-            ->when($this->filterMonth, fn($q) => $q->whereRaw('DATE_FORMAT(date, "%Y-%m") = ?', [$this->filterMonth]))
+            ->when($this->filterMonth, function ($q) {
+                [$y, $m] = explode('-', $this->filterMonth);
+                $q->whereYear('date', $y)->whereMonth('date', $m);
+            })
             ->orderBy('date', 'desc')
             ->paginate(15);
 

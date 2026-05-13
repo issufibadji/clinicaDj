@@ -1,50 +1,67 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
-
-/*
-|--------------------------------------------------------------------------
-| Test Case
-|--------------------------------------------------------------------------
-|
-| The closure you provide to your test functions is always bound to a specific PHPUnit test
-| case class. By default, that class is "PHPUnit\Framework\TestCase". Of course, you may
-| need to change it using the "pest()" function to bind a different classes or traits.
-|
-*/
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
-/*
-|--------------------------------------------------------------------------
-| Expectations
-|--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
-*/
+pest()->extend(TestCase::class)
+    ->in('Unit');
 
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Functions
-|--------------------------------------------------------------------------
-|
-| While Pest is very powerful out-of-the-box, you may have some testing code specific to your
-| project that you don't want to repeat in every file. Here you can also expose helpers as
-| global functions to help you to reduce the number of lines of code in your test files.
-|
-*/
+// ── Helpers globais ───────────────────────────────────────────────────────────
 
-function something()
+/**
+ * Limpa cache do Spatie Permission (necessário entre testes com roles/permissions).
+ */
+function resetPermissions(): void
 {
-    // ..
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+}
+
+/**
+ * Cria e retorna um usuário admin com o papel "admin".
+ */
+function makeAdmin(array $attributes = []): User
+{
+    resetPermissions();
+    $role = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+    $user = User::factory()->create(array_merge(['is_active' => true], $attributes));
+    $user->assignRole($role);
+    return $user;
+}
+
+/**
+ * Cria usuário com papel e conjunto de permissões específicos.
+ */
+function makeUserWithRole(string $roleName, array $permissions = [], array $attributes = []): User
+{
+    resetPermissions();
+    $role = Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
+
+    foreach ($permissions as $perm) {
+        $p = Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
+        $role->givePermissionTo($p);
+    }
+
+    $user = User::factory()->create(array_merge(['is_active' => true], $attributes));
+    $user->assignRole($role);
+    return $user;
+}
+
+/**
+ * Cria usuário inativo (sem papel específico).
+ */
+function makeInactiveUser(): User
+{
+    return User::factory()->create(['is_active' => false]);
 }

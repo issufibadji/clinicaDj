@@ -224,7 +224,7 @@ POST /login
 **Tela de challenge 2FA (`/dois-fatores`):**
 ```
 ┌─────────────────────────────────────────────────────┐
-│  Clínica JM                                         │
+│  Clínica DR.João Mendes                                         │
 │                                                     │
 │  Verificação em duas etapas                         │
 │  Digite o código do seu aplicativo autenticador.    │

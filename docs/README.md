@@ -1,4 +1,4 @@
-# Documentação — App Clínica JM
+# Documentação — App Clínica DR.João Mendes
 
 Painel administrativo para clínica médica. Stack: Laravel 12 · Livewire 3 · Alpine.js · Tailwind CSS 3 · Spatie Permission v6.
 
