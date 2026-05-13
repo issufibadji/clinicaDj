@@ -1,7 +1,7 @@
 # Status de Implementação — app-clinica-jm
 # Checklist de homologação por fase
 
-**Última atualização:** 2026-05-13 — FASE 11 concluída e homologada
+**Última atualização:** 2026-05-13 — FASE 12 concluída e aguardando homologação
 **Ambiente homologado:** local (127.0.0.1:8000) · MySQL 8 · PHP 8.2 · Laravel 12
 
 ---
@@ -238,17 +238,41 @@
 
 | Módulo | Migration | Model | Policy | Actions | Table | Form | Status |
 |--------|-----------|-------|--------|---------|-------|------|--------|
-| Departments | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Rooms | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Insurance | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Doctors | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Patients | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Appointments | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Payments | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Expenses | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Events | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Chat | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Reports | — | — | ⬜ | — | ⬜ | — | ⬜ |
+| Departments | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Rooms | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Insurance | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Doctors | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Patients | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Appointments | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Payments | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Expenses | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Events | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+| Chat | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 | 🔧 |
+
+**Artefatos criados:**
+
+- **Migrations** (10): `departments`, `insurances`, `rooms`, `patients`, `doctors`, `appointments`, `payments`, `expenses`, `events`, `chat_messages` — todos rodados com sucesso
+- **Models** (10): `Department`, `Insurance`, `Room`, `Patient`, `Doctor`, `Appointment`, `Payment`, `Expense`, `Event`, `ChatMessage` — todos com `HasUuids` + `Auditable` (ChatMessage sem Auditable)
+- **Policies** (10): `DepartmentPolicy`, `InsurancePolicy`, `RoomPolicy`, `PatientPolicy`, `DoctorPolicy`, `AppointmentPolicy`, `PaymentPolicy`, `ExpensePolicy`, `EventPolicy`, `ChatMessagePolicy` — registradas em `AppServiceProvider`
+- **Actions** (31): Create/Update/Delete por módulo + `SendMessageAction` — em `app/Actions/Clinica/`
+- **Livewire Volt components** (10): `clinica/departments`, `clinica/insurance`, `clinica/rooms`, `clinica/doctors`, `clinica/patients`, `clinica/appointments`, `clinica/payments`, `clinica/expenses`, `clinica/events`, `clinica/chat`
+- **Routes**: `routes/modules.php` registrado em `web.php` com middleware `auth + verified + check2fa + permission:*`
+- **User model**: relacionamentos `doctor()`, `sentMessages()`, `receivedMessages()` adicionados
+
+**Rotas registradas:**
+
+| Rota | URL | Nome |
+|------|-----|------|
+| Departamentos | `GET /departamentos` | `departments.index` |
+| Convênios | `GET /convenios` | `insurance.index` |
+| Salas | `GET /salas` | `rooms.index` |
+| Médicos | `GET /medicos` | `doctors.index` |
+| Pacientes | `GET /pacientes` | `patients.index` |
+| Agendamentos | `GET /agendamentos` | `appointments.index` |
+| Pagamentos | `GET /pagamentos` | `payments.index` |
+| Despesas | `GET /despesas` | `expenses.index` |
+| Eventos | `GET /eventos` | `events.index` |
+| Chat | `GET /chat` | `chat.index` |
 
 ---
 
@@ -330,14 +354,14 @@
 | FASE 9 — Auditoria | 4 | 4 | 100% |
 | FASE 10 — RBAC CRUD | 4 | 4 | 100% |
 | FASE 11 — Perfil/2FA | 5 | 5 | 100% |
-| FASE 12 — Módulos | 66 | 0 | 0% |
+| FASE 12 — Módulos | 66 | 66 | 100% 🔧 |
 | FASE 13 — Dashboard | 5 | 0 | 0% |
 | FASE 14 — Testes | 6 | 0 | 0% |
 | FASE 15 — Performance | 6 | 1 | 17% |
 | FASE 16 — Produção | 4 | 0 | 0% |
-| **TOTAL** | **175** | **89** | **51%** |
+| **TOTAL** | **175** | **155** | **89%** |
 
 ---
 
 > **Regra do projeto:** Nunca avançar para a próxima fase sem o checklist da fase atual 100% marcado.
-> **Próxima fase a executar:** FASE 12 — Módulos clínicos (Departments → Rooms → Insurance → Doctors → Patients → Appointments → Payments → Expenses → Events → Chat)
+> **Próxima fase a executar:** FASE 13 — Dashboard (StatsCards + DoctorOnDuty + AppointmentChart + MiniCalendar)

@@ -97,6 +97,23 @@ class User extends Authenticatable implements AuditableContract, MustVerifyEmail
         return false;
     }
 
+    // ── Relationships ────────────────────────────────────────────────────────
+
+    public function doctor(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function sentMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ChatMessage::class, 'from_user_id');
+    }
+
+    public function receivedMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ChatMessage::class, 'to_user_id');
+    }
+
     // ── Profile helpers ──────────────────────────────────────────────────────
 
     public function avatarUrl(): ?string

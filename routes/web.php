@@ -25,4 +25,5 @@ Route::middleware(['auth', 'check2fa'])->prefix('sistema')->name('admin.sistema.
 
 require __DIR__.'/profile.php';
 require __DIR__.'/admin.php';
+require __DIR__.'/modules.php';
 require __DIR__.'/auth.php';
