@@ -136,7 +136,8 @@ new class extends Component
             </button>
             <button wire:click="confirm"
                     wire:loading.attr="disabled"
-                    class="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white
+                    class="flex items-center gap-2 bg-amber-500 hover:bg-amber-600
+                           text-slate-900 dark:text-white
                            font-semibold text-sm py-1.5 px-4 rounded-lg transition-colors">
                 <span wire:loading.remove wire:target="confirm">
                     <x-heroicon-o-arrow-right-on-rectangle class="w-4 h-4 inline" />
