@@ -6,6 +6,9 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +16,8 @@ use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements AuditableContract, MustVerifyEmail
@@ -27,6 +32,7 @@ class User extends Authenticatable implements AuditableContract, MustVerifyEmail
         'phone',
         'avatar',
         'is_active',
+        'active_profile_id',
         'two_factor_secret',
         'two_factor_recovery_codes',
         'two_factor_confirmed_at',
@@ -101,7 +107,7 @@ class User extends Authenticatable implements AuditableContract, MustVerifyEmail
 
     // ── Web Push ─────────────────────────────────────────────────────────────
 
-    public function pushSubscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function pushSubscriptions(): HasMany
     {
         return $this->hasMany(PushSubscription::class);
     }
@@ -146,17 +152,58 @@ class User extends Authenticatable implements AuditableContract, MustVerifyEmail
 
     // ── Relationships ────────────────────────────────────────────────────────
 
-    public function doctor(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function doctor(): HasOne
     {
         return $this->hasOne(Doctor::class);
     }
 
-    public function sentMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function profiles(): HasMany
+    {
+        return $this->hasMany(UserProfile::class);
+    }
+
+    public function activeProfile(): BelongsTo
+    {
+        return $this->belongsTo(UserProfile::class, 'active_profile_id');
+    }
+
+    public function defaultProfile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class)->where('is_default', true);
+    }
+
+    // ── Multi-profile helpers ─────────────────────────────────────────────────
+
+    public function switchToProfile(string $profileId): void
+    {
+        $profile = $this->profiles()->where('id', $profileId)->where('is_active', true)->firstOrFail();
+
+        $this->updateQuietly(['active_profile_id' => $profile->id]);
+        session(['active_profile_id' => $profile->id]);
+
+        // Sincroniza o papel ativo com Spatie para que permissões reflitam imediatamente
+        $this->syncRoles([$profile->role->name]);
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $profile->update(['last_used_at' => now()]);
+    }
+
+    public function getActiveRoleAttribute(): ?Role
+    {
+        return $this->activeProfile?->role ?? $this->roles->first();
+    }
+
+    public function hasProfile(int $roleId): bool
+    {
+        return $this->profiles()->where('role_id', $roleId)->exists();
+    }
+
+    public function sentMessages(): HasMany
     {
         return $this->hasMany(ChatMessage::class, 'from_user_id');
     }
 
-    public function receivedMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function receivedMessages(): HasMany
     {
         return $this->hasMany(ChatMessage::class, 'to_user_id');
     }

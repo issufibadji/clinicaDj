@@ -33,7 +33,16 @@ new class extends Component {
             </div>
         @endif
 
-        <span class="hidden md:block max-w-[140px] truncate">{{ auth()->user()->name }}</span>
+        <div class="hidden md:flex flex-col items-start leading-none">
+            <span class="max-w-[120px] truncate text-sm">{{ auth()->user()->name }}</span>
+            @php $activeProfile = auth()->user()->activeProfile?->load('role'); @endphp
+            @if($activeProfile)
+                <span class="flex items-center gap-1 text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                    <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: {{ $activeProfile->color }};"></span>
+                    {{ $activeProfile->role?->name }}
+                </span>
+            @endif
+        </div>
 
         <span :class="{ 'rotate-180': open }" class="transition-transform duration-200">
             <x-heroicon-o-chevron-down class="w-3.5 h-3.5 text-slate-400" />
@@ -48,7 +57,7 @@ new class extends Component {
          x-transition:leave="transition ease-in duration-100"
          x-transition:leave-start="opacity-100 scale-100 translate-y-0"
          x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
-         class="absolute right-0 top-full mt-2 w-60
+         class="absolute right-0 top-full mt-2 w-64
                 bg-white dark:bg-slate-800 rounded-xl shadow-lg
                 border border-slate-200 dark:border-slate-700 py-1 z-50"
          style="display: none;">
@@ -61,14 +70,10 @@ new class extends Component {
             <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
                 {{ auth()->user()->email }}
             </p>
-            @php $role = auth()->user()->getRoleNames()->first(); @endphp
-            @if($role)
-                <span class="inline-flex items-center mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium
-                             bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-400 capitalize">
-                    {{ $role }}
-                </span>
-            @endif
         </div>
+
+        {{-- Troca de perfil (Livewire) --}}
+        <livewire:shared.profile-switcher />
 
         {{-- Links principais --}}
         <div class="py-1">
@@ -77,6 +82,13 @@ new class extends Component {
                       hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
                 <x-heroicon-o-user-circle class="w-4 h-4 text-slate-400" />
                 {{ __('Meu Perfil') }}
+            </a>
+
+            <a href="{{ route('profile.profiles') }}" wire:navigate @click="open = false"
+               class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300
+                      hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors">
+                <x-heroicon-o-identification class="w-4 h-4 text-slate-400" />
+                {{ __('Meus Perfis') }}
             </a>
 
             <a href="{{ route('profile.settings') }}" wire:navigate @click="open = false"

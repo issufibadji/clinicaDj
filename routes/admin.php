@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'check2fa'])->prefix('admin')->name('admin.')->group(function () {
 
+    // Perfis de usuário (admin)
+    Volt::route('usuarios/{user}/perfis', 'admin.access-control.user-profile-manager')
+        ->middleware('permission:users.edit')
+        ->name('usuarios.profiles');
+
     // Permissões
     Volt::route('permissoes', 'admin.permissions.permission-manager')
         ->middleware('permission:permissions.view')

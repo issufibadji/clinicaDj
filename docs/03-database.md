@@ -27,6 +27,7 @@
 | two_factor_secret | text | sim | null | — | Segredo TOTP (criptografado) |
 | two_factor_recovery_codes | text | sim | null | — | Códigos de recuperação (JSON criptografado) |
 | two_factor_confirmed_at | timestamp | sim | null | — | Quando 2FA foi confirmado |
+| active_profile_id | uuid (char 36) | sim | null | — | FK user_profiles.id — perfil ativo |
 | created_at | timestamp | não | now() | — | |
 | updated_at | timestamp | não | now() | — | |
 | deleted_at | timestamp | sim | null | INDEX | Soft delete |
@@ -36,6 +37,39 @@
 - hasMany Appointment (como patient via appointments.created_by)
 - hasMany Message (sender_id, receiver_id)
 - hasMany Notification
+- morphMany Audit (auditable)
+- hasMany UserProfile
+- belongsTo UserProfile (activeProfile via active_profile_id)
+
+---
+
+## N. Tabela: `user_profiles`
+
+> Adicionada na **Fase de Multi-Perfil**.
+
+| Coluna | Tipo | Nullable | Default | Índice | Descrição |
+|--------|------|----------|---------|--------|-----------|
+| id | uuid (char 36) | não | uuid() | PK | |
+| user_id | uuid (char 36) | não | — | FK, INDEX | → users.id (cascade delete) |
+| role_id | bigint unsigned | não | — | FK, INDEX | → roles.id (Spatie) |
+| display_name | varchar(100) | sim | null | — | Nome de exibição neste perfil |
+| avatar | varchar(255) | sim | null | — | Avatar específico do perfil |
+| color | varchar(7) | não | #10B981 | — | Cor identificadora (#hex) |
+| is_default | boolean | não | false | — | Perfil ativado automaticamente no login |
+| is_active | boolean | não | true | — | Perfil disponível para uso |
+| last_used_at | timestamp | sim | null | — | Última vez que foi selecionado |
+| settings | json | sim | null | — | Configurações extras do perfil |
+| created_at | timestamp | não | now() | — | |
+| updated_at | timestamp | não | now() | — | |
+
+**Constraints:**
+
+- `UNIQUE (user_id, role_id)` — um perfil por papel por usuário
+
+**Relacionamentos:**
+
+- belongsTo User
+- belongsTo Role (Spatie)
 - morphMany Audit (auditable)
 
 **Soft delete:** sim  

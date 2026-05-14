@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Admin\Profiles\SwitchActiveProfile;
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
@@ -14,6 +15,26 @@ new #[Layout('layouts.guest')] class extends Component
         $this->validate();
         $this->form->authenticate();
         Session::regenerate();
+
+        $user = auth()->user();
+        $activeProfiles = $user->profiles()->where('is_active', true)->count();
+
+        // Usuário com múltiplos perfis → tela de seleção
+        if ($activeProfiles > 1 && ! $user->active_profile_id) {
+            $this->redirect(route('auth.select-profile'), navigate: true);
+            return;
+        }
+
+        // Ativa perfil padrão automaticamente
+        if ($activeProfiles >= 1 && ! $user->active_profile_id) {
+            $default = $user->profiles()->where('is_default', true)->where('is_active', true)->first()
+                ?? $user->profiles()->where('is_active', true)->first();
+
+            if ($default) {
+                app(SwitchActiveProfile::class)->handle($user, $default->id);
+            }
+        }
+
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 }; ?>

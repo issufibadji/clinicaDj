@@ -1117,3 +1117,72 @@ Flash "Salvo ✓" por 2s após cada save, gerenciado por Alpine.js via evento `f
 | `flash-saved` | `['key' => $key]` | Alpine.js na view (mostra "Salvo ✓") |
 
 **Dependências de permissão:** `system.settings`
+
+
+---
+
+## Grupo C — Multi-Perfil (Fase Multi-Profile)
+
+> **Última atualização:** adicionados 4 componentes Volt para o sistema de múltiplos perfis por usuário.
+
+---
+
+### Auth\ProfileSelector
+
+**Arquivo:** `resources/views/livewire/pages/auth/profile-selector.blade.php`
+**Rota:** `GET /selecionar-perfil` → `auth.select-profile`
+**Middleware:** `auth`, `check2fa`
+
+**Responsabilidade:** Tela exibida após login quando o usuário tem mais de um perfil ativo. Permite selecionar com qual perfil entrar, com opção de marcar como padrão.
+
+**Comportamento:**
+- Se usuário tem apenas 1 perfil ativo → redireciona diretamente para `/dashboard`
+- Cards animados com `x-transition` por perfil
+- Checkbox "Lembrar minha escolha como padrão" via `SetDefaultProfile`
+- Após seleção → `SwitchActiveProfile` + redirect para dashboard
+
+---
+
+### Shared\ProfileSwitcher
+
+**Arquivo:** `resources/views/livewire/shared/profile-switcher.blade.php`
+**Uso:** Embutido no dropdown do topbar (`layout/navigation.blade.php`)
+
+**Responsabilidade:** Trocar perfil ativo sem logout, diretamente do topbar.
+
+**Propriedades computadas:**
+- `activeProfile` — perfil ativo do usuário logado (com role)
+- `otherProfiles` — demais perfis ativos disponíveis para troca
+
+**Métodos:**
+- `switchTo(string $profileId)` → `SwitchActiveProfile` + redirect
+
+---
+
+### Profile\UserProfiles
+
+**Arquivo:** `resources/views/livewire/profile/user-profiles.blade.php`
+**Rota:** `GET /perfil/perfis` → `profile.profiles`
+**Middleware:** `auth`, `verified`, `check2fa`
+
+**Responsabilidade:** Gerenciamento dos próprios perfis pelo usuário logado.
+
+**Funcionalidades:**
+- Listar perfis com cor, papel, badges (ativo, padrão, inativo)
+- Criar novo perfil (select papel + display_name + color picker)
+- Definir padrão, usar (trocar para) e remover perfis
+
+---
+
+### AccessControl\UserProfileManager
+
+**Arquivo:** `resources/views/livewire/admin/access-control/user-profile-manager.blade.php`
+**Rota:** `GET /admin/usuarios/{user}/perfis` → `admin.usuarios.profiles`
+**Middleware:** `auth`, `check2fa`, `permission:users.edit`
+
+**Responsabilidade:** Admin gerencia perfis de qualquer usuário.
+
+**Funcionalidades:**
+- Listar, criar e remover perfis do usuário selecionado
+- Definir perfil padrão
+- Histórico de trocas via tabela `audits`
