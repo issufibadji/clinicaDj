@@ -22,7 +22,7 @@
 <body class="bg-slate-50 dark:bg-slate-900 font-sans antialiased h-full">
 
     <div class="flex h-screen overflow-hidden"
-         x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
+         x-data="{ sidebarOpen: window.innerWidth >= 1024, sidebarCollapsed: false }">
 
         {{-- Sidebar --}}
         @include('partials.sidebar')

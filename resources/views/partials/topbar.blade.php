@@ -5,7 +5,7 @@
 
     {{-- Esquerda: toggle sidebar + título da página --}}
     <div class="flex items-center gap-3">
-        <button @click="sidebarOpen = !sidebarOpen"
+        <button @click="window.innerWidth >= 1024 ? sidebarCollapsed = !sidebarCollapsed : sidebarOpen = !sidebarOpen"
                 class="icon-btn text-slate-500 dark:text-slate-400"
                 title="{{ __('Expandir / recolher menu') }}">
             <x-heroicon-o-bars-3 class="w-5 h-5" />

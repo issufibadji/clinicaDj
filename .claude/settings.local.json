@@ -10,7 +10,13 @@
       "Bash(echo \"# Web Push \\(VAPID\\)\")",
       "Bash(echo \"VAPID_PUBLIC_KEY=BMxIRwOm4dc2-6GBL0jWys_cXD6I2l1ShzGHUWNQxmd9iL2JIp2RRRDHyIXUUDzXgYr6SwzX31NSWBn6H0tNL3w\")",
       "Bash(echo \"VAPID_PRIVATE_KEY=vA0f-lMbFV6_IyO5upiYuobKFANrAJEuj1mYjD5hP9k\")",
-      "Bash(echo \"VAPID_SUBJECT=mailto:admin@clinica.local\")"
+      "Bash(echo \"VAPID_SUBJECT=mailto:admin@clinica.local\")",
+      "Bash(node --check vendor/livewire/livewire/dist/livewire.js)",
+      "Bash(node --check public/build/assets/app-C6LXmS5N.js)",
+      "Bash(node --check public/build/assets/app-pttsi6_n.js)",
+      "Bash(.\\\\node_modules\\\\.bin\\\\vite build *)",
+      "PowerShell(cd \"c:\\\\Develop\\\\app-clinica-jm\\\\app-clinica-jm\"; ls node_modules | Where-Object { $_.Name -eq \"vite\" } | Select-Object Name, FullName)",
+      "Bash(grep -o \"lg:w-16\\\\|lg:w-64\\\\|lg\\\\\\\\\\\\\\\\:w-16\\\\|lg\\\\\\\\\\\\\\\\:w-64\\\\|\\\\.lg\\\\\\\\\\\\\\\\:w-16\\\\|\\\\.lg\\\\\\\\\\\\\\\\:w-64\" public/build/assets/app-YGg_3eSo.css)"
     ]
   }
 }
