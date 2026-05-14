@@ -106,9 +106,8 @@
 
                             <x-dynamic-component
                                 :component="$item->icon"
-                                class="flex-shrink-0 transition-all duration-300
-                                       {{ $isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200' }}"
-                                ::class="sidebarCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'" />
+                                class="w-5 h-5 flex-shrink-0
+                                       {{ $isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200' }}" />
 
                             <span x-show="!sidebarCollapsed"
                                   x-transition:enter="transition ease-out duration-150 delay-75"
