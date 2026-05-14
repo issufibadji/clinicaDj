@@ -3,21 +3,32 @@
 namespace App\Actions\Admin\System;
 
 use App\Models\MenuItem;
+use App\Models\User;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 
 class GetSidebarMenus
 {
     public static function forUser(): Collection
     {
-        $level = auth()->user()?->roles()->min('level') ?? 99;
+        /** @var User|null $user */
+        $user = auth()->user();
 
-        return Cache::remember("sidebar.menu.level.{$level}", 3600, function () use ($level) {
-            return MenuItem::visible()
-                ->forLevel($level)
-                ->ordered()
-                ->get()
-                ->groupBy('group');
-        });
+        if (! $user) {
+            return collect();
+        }
+
+        $permissions = $user->getAllPermissions()->pluck('name');
+
+        return MenuItem::visible()
+            ->ordered()
+            ->get()
+            ->filter(function (MenuItem $item) use ($permissions) {
+                if ($item->permission_required === null) {
+                    return true;
+                }
+
+                return $permissions->contains($item->permission_required);
+            })
+            ->groupBy('group');
     }
 }

@@ -39,6 +39,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Event::class);
         $this->reset(['formTitle', 'formDescription', 'editingId', 'confirmId']);
         $this->formStartAt  = now()->format('Y-m-d\TH:i');
         $this->formEndAt    = now()->addHour()->format('Y-m-d\TH:i');
@@ -49,6 +50,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', Event::findOrFail($id));
         $ev = Event::findOrFail($id);
         $this->editingId       = $id;
         $this->formTitle       = $ev->title;
@@ -64,6 +66,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Event::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Event::class);
+
         $this->validate([
             'formTitle'       => ['required', 'string', 'max:150'],
             'formDescription' => ['nullable', 'string', 'max:1000'],
@@ -87,11 +93,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Event::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $ev = Event::findOrFail($this->confirmId);
+        $this->authorize('delete', $ev);
         app(DeleteEventAction::class)->handle($ev);
         session()->flash('success', "Evento \"{$ev->title}\" excluído.");
         $this->confirmId = null;

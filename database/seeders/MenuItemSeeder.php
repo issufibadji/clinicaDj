@@ -10,30 +10,30 @@ class MenuItemSeeder extends Seeder
     public function run(): void
     {
         $items = [
-            // ─── Hospital ─────────────────────────────────────────────────
-            ['label' => 'Dashboard',          'route' => 'dashboard',           'icon' => 'heroicon-o-squares-2x2',         'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 1],
-            ['label' => 'Agendamentos',        'route' => 'appointments.index',  'icon' => 'heroicon-o-calendar-days',       'group' => 'Hospital',            'min_level' => 3, 'is_visible' => true,  'order' => 2],
-            ['label' => 'Médicos',             'route' => 'doctors.index',       'icon' => 'heroicon-o-user-circle',         'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 3],
-            ['label' => 'Pacientes',           'route' => 'patients.index',      'icon' => 'heroicon-o-users',               'group' => 'Hospital',            'min_level' => 3, 'is_visible' => true,  'order' => 4],
-            ['label' => 'Leitos e Salas',      'route' => 'rooms.index',         'icon' => 'heroicon-o-building-office',     'group' => 'Hospital',            'min_level' => 3, 'is_visible' => true,  'order' => 5],
-            ['label' => 'Pagamentos',          'route' => 'payments.index',      'icon' => 'heroicon-o-banknotes',           'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 6],
-            ['label' => 'Despesas',            'route' => 'expenses.index',      'icon' => 'heroicon-o-chart-bar',           'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 7],
-            ['label' => 'Departamentos',       'route' => 'departments.index',   'icon' => 'heroicon-o-building-office-2',   'group' => 'Hospital',            'min_level' => 1, 'is_visible' => true,  'order' => 8],
-            ['label' => 'Convênios',           'route' => 'insurance.index',     'icon' => 'heroicon-o-shield-check',        'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 9],
-            ['label' => 'Eventos',             'route' => 'events.index',        'icon' => 'heroicon-o-calendar',            'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 10],
-            ['label' => 'Chat',                'route' => 'chat.index',          'icon' => 'heroicon-o-chat-bubble-left-right', 'group' => 'Hospital',        'min_level' => 4, 'is_visible' => true,  'order' => 11],
-            ['label' => 'Notificações',        'route' => 'notifications.index', 'icon' => 'heroicon-o-bell',                 'group' => 'Hospital',            'min_level' => 4, 'is_visible' => true,  'order' => 12],
-            // ─── Controle de Acesso ────────────────────────────────────────
-            ['label' => 'Notificações',        'route' => 'admin.notificacoes.index', 'icon' => 'heroicon-o-bell-alert',      'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 0],
-            ['label' => 'Usuários',            'route' => 'admin.usuarios.index',     'icon' => 'heroicon-o-user-group',      'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 1],
-            ['label' => 'Papéis',              'route' => 'admin.papeis.index',       'icon' => 'heroicon-o-identification',  'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 2],
-            ['label' => 'Permissões',          'route' => 'admin.permissoes.index',   'icon' => 'heroicon-o-key',             'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 3],
-            ['label' => 'Vinc. Usuário',       'route' => 'admin.vinculo.index',      'icon' => 'heroicon-o-link',            'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 4],
-            // ─── Sistema ────────────────────────────────────────────────────
-            ['label' => 'Auditoria',           'route' => 'admin.sistema.auditoria',        'icon' => 'heroicon-o-clipboard-document-list', 'group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 1],
-            ['label' => 'Menus',               'route' => 'admin.sistema.menus',            'icon' => 'heroicon-o-bars-3',                  'group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 2],
-            ['label' => 'Configurações',       'route' => 'admin.sistema.configuracoes',    'icon' => 'heroicon-o-cog-6-tooth',             'group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 3],
-            ['label' => 'Impersonações',       'route' => 'admin.impersonation.history',    'icon' => 'heroicon-o-arrow-right-on-rectangle','group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 4],
+            // ─── Hospital ──────────────────────────────────────────────────────
+            ['label' => 'Dashboard',    'route' => 'dashboard',           'icon' => 'heroicon-o-squares-2x2',            'group' => 'Hospital',           'min_level' => 4, 'permission_required' => null,                 'is_visible' => true, 'order' => 1],
+            ['label' => 'Agendamentos', 'route' => 'appointments.index',  'icon' => 'heroicon-o-calendar-days',          'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'appointments.view',  'is_visible' => true, 'order' => 2],
+            ['label' => 'Médicos',      'route' => 'doctors.index',       'icon' => 'heroicon-o-user-circle',            'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'doctors.view',       'is_visible' => true, 'order' => 3],
+            ['label' => 'Pacientes',    'route' => 'patients.index',      'icon' => 'heroicon-o-users',                  'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'patients.view',      'is_visible' => true, 'order' => 4],
+            ['label' => 'Leitos e Salas','route'=> 'rooms.index',         'icon' => 'heroicon-o-building-office',        'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'rooms.view',         'is_visible' => true, 'order' => 5],
+            ['label' => 'Pagamentos',   'route' => 'payments.index',      'icon' => 'heroicon-o-banknotes',              'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'payments.view',      'is_visible' => true, 'order' => 6],
+            ['label' => 'Despesas',     'route' => 'expenses.index',      'icon' => 'heroicon-o-chart-bar',              'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'reports.view',       'is_visible' => true, 'order' => 7],
+            ['label' => 'Departamentos','route' => 'departments.index',   'icon' => 'heroicon-o-building-office-2',      'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'departments.view',   'is_visible' => true, 'order' => 8],
+            ['label' => 'Convênios',    'route' => 'insurance.index',     'icon' => 'heroicon-o-shield-check',           'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'insurance.view',     'is_visible' => true, 'order' => 9],
+            ['label' => 'Eventos',      'route' => 'events.index',        'icon' => 'heroicon-o-calendar',               'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'events.view',        'is_visible' => true, 'order' => 10],
+            ['label' => 'Chat',         'route' => 'chat.index',          'icon' => 'heroicon-o-chat-bubble-left-right', 'group' => 'Hospital',           'min_level' => 4, 'permission_required' => 'chat.view',          'is_visible' => true, 'order' => 11],
+            ['label' => 'Notificações', 'route' => 'notifications.index', 'icon' => 'heroicon-o-bell',                   'group' => 'Hospital',           'min_level' => 4, 'permission_required' => null,                 'is_visible' => true, 'order' => 12],
+            // ─── Controle de Acesso ────────────────────────────────────────────
+            ['label' => 'Notificações', 'route' => 'admin.notificacoes.index', 'icon' => 'heroicon-o-bell-alert',        'group' => 'Controle de Acesso', 'min_level' => 1, 'permission_required' => 'users.view',         'is_visible' => true, 'order' => 0],
+            ['label' => 'Usuários',     'route' => 'admin.usuarios.index',     'icon' => 'heroicon-o-user-group',        'group' => 'Controle de Acesso', 'min_level' => 1, 'permission_required' => 'users.view',         'is_visible' => true, 'order' => 1],
+            ['label' => 'Papéis',       'route' => 'admin.papeis.index',       'icon' => 'heroicon-o-identification',    'group' => 'Controle de Acesso', 'min_level' => 1, 'permission_required' => 'roles.view',         'is_visible' => true, 'order' => 2],
+            ['label' => 'Permissões',   'route' => 'admin.permissoes.index',   'icon' => 'heroicon-o-key',               'group' => 'Controle de Acesso', 'min_level' => 1, 'permission_required' => 'permissions.view',   'is_visible' => true, 'order' => 3],
+            ['label' => 'Vinc. Usuário','route' => 'admin.vinculo.index',      'icon' => 'heroicon-o-link',              'group' => 'Controle de Acesso', 'min_level' => 1, 'permission_required' => 'users.view',         'is_visible' => true, 'order' => 4],
+            // ─── Sistema ───────────────────────────────────────────────────────
+            ['label' => 'Auditoria',    'route' => 'admin.sistema.auditoria',       'icon' => 'heroicon-o-clipboard-document-list', 'group' => 'Sistema', 'min_level' => 1, 'permission_required' => 'system.audit',    'is_visible' => true, 'order' => 1],
+            ['label' => 'Menus',        'route' => 'admin.sistema.menus',           'icon' => 'heroicon-o-bars-3',                  'group' => 'Sistema', 'min_level' => 1, 'permission_required' => 'system.menus',    'is_visible' => true, 'order' => 2],
+            ['label' => 'Configurações','route' => 'admin.sistema.configuracoes',   'icon' => 'heroicon-o-cog-6-tooth',             'group' => 'Sistema', 'min_level' => 1, 'permission_required' => 'system.settings', 'is_visible' => true, 'order' => 3],
+            ['label' => 'Impersonações','route' => 'admin.impersonation.history',   'icon' => 'heroicon-o-arrow-right-on-rectangle','group' => 'Sistema', 'min_level' => 1, 'permission_required' => 'system.audit',    'is_visible' => true, 'order' => 4],
         ];
 
         foreach ($items as $item) {

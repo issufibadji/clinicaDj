@@ -34,6 +34,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Expense::class);
         $this->reset(['formDescription', 'formAmount', 'formCategory', 'editingId', 'confirmId']);
         $this->formDate = now()->format('Y-m-d');
         $this->showForm = true;
@@ -41,6 +42,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', Expense::findOrFail($id));
         $exp = Expense::findOrFail($id);
         $this->editingId       = $id;
         $this->formDescription = $exp->description;
@@ -54,6 +56,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Expense::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Expense::class);
+
         $this->validate([
             'formDescription' => ['required', 'string', 'max:200'],
             'formAmount'      => ['required', 'numeric', 'min:0.01'],
@@ -76,11 +82,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Expense::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $exp = Expense::findOrFail($this->confirmId);
+        $this->authorize('delete', $exp);
         app(DeleteExpenseAction::class)->handle($exp);
         session()->flash('success', __('Despesa excluída.'));
         $this->confirmId = null;

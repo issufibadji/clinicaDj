@@ -16,6 +16,7 @@ class MenuItem extends Model implements Auditable
         'icon',
         'group',
         'min_level',
+        'permission_required',
         'is_visible',
         'order',
     ];

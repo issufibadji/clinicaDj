@@ -26,6 +26,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Insurance::class);
         $this->reset(['formName', 'formPlanType', 'formContactPhone', 'editingId', 'confirmId']);
         $this->formIsActive = true;
         $this->showForm     = true;
@@ -33,6 +34,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', Insurance::findOrFail($id));
         $ins = Insurance::findOrFail($id);
         $this->editingId        = $id;
         $this->formName         = $ins->name;
@@ -46,6 +48,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Insurance::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Insurance::class);
+
         $this->validate([
             'formName'     => ['required', 'string', 'max:100'],
             'formPlanType' => ['required', 'string', 'max:50'],
@@ -65,11 +71,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Insurance::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $ins = Insurance::findOrFail($this->confirmId);
+        $this->authorize('delete', $ins);
         try {
             app(DeleteInsuranceAction::class)->handle($ins);
             session()->flash('success', "Convênio \"{$ins->name}\" excluído.");

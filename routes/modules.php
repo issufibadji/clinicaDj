@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified', 'check2fa'])->group(function () {
         ->name('payments.index');
 
     Volt::route('/despesas', 'clinica.expenses')
-        ->middleware('permission:payments.view')
+        ->middleware('permission:reports.view')
         ->name('expenses.index');
 
     Volt::route('/eventos', 'clinica.events')

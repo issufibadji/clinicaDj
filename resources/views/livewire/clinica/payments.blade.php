@@ -48,6 +48,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Payment::class);
         $this->reset(['formAppointmentId', 'formAmount', 'editingId', 'confirmId']);
         $this->formMethod = 'pix';
         $this->formStatus = 'pending';
@@ -56,6 +57,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', Payment::findOrFail($id));
         $pay = Payment::findOrFail($id);
         $this->editingId        = $id;
         $this->formAppointmentId = $pay->appointment_id;
@@ -69,6 +71,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Payment::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Payment::class);
+
         $this->validate([
             'formAppointmentId' => ['required', 'exists:appointments,id'],
             'formAmount'        => ['required', 'numeric', 'min:0.01'],
@@ -91,11 +97,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Payment::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $pay = Payment::findOrFail($this->confirmId);
+        $this->authorize('delete', $pay);
         try {
             app(DeletePaymentAction::class)->handle($pay);
             session()->flash('success', __('Pagamento excluído.'));

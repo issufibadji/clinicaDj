@@ -16,7 +16,9 @@
       "Bash(node --check public/build/assets/app-pttsi6_n.js)",
       "Bash(.\\\\node_modules\\\\.bin\\\\vite build *)",
       "PowerShell(cd \"c:\\\\Develop\\\\app-clinica-jm\\\\app-clinica-jm\"; ls node_modules | Where-Object { $_.Name -eq \"vite\" } | Select-Object Name, FullName)",
-      "Bash(grep -o \"lg:w-16\\\\|lg:w-64\\\\|lg\\\\\\\\\\\\\\\\:w-16\\\\|lg\\\\\\\\\\\\\\\\:w-64\\\\|\\\\.lg\\\\\\\\\\\\\\\\:w-16\\\\|\\\\.lg\\\\\\\\\\\\\\\\:w-64\" public/build/assets/app-YGg_3eSo.css)"
+      "Bash(grep -o \"lg:w-16\\\\|lg:w-64\\\\|lg\\\\\\\\\\\\\\\\:w-16\\\\|lg\\\\\\\\\\\\\\\\:w-64\\\\|\\\\.lg\\\\\\\\\\\\\\\\:w-16\\\\|\\\\.lg\\\\\\\\\\\\\\\\:w-64\" public/build/assets/app-YGg_3eSo.css)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Develop\\\\app-clinica-jm\\\\app-clinica-jm\\\\resources\\\\views\\\\livewire\\\\appointments\" -File)",
+      "Bash(not exist *)"
     ]
   }
 }

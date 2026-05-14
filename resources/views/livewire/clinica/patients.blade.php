@@ -29,12 +29,14 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Patient::class);
         $this->reset(['formName', 'formCpf', 'formBirthDate', 'formPhone', 'formEmail', 'formInsuranceId', 'editingId', 'confirmId']);
         $this->showForm = true;
     }
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', Patient::findOrFail($id));
         $p = Patient::findOrFail($id);
         $this->editingId      = $id;
         $this->formName       = $p->name;
@@ -50,6 +52,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Patient::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Patient::class);
+
         $this->validate([
             'formName'      => ['required', 'string', 'max:100'],
             'formCpf'       => ['required', 'string', 'size:14',
@@ -75,11 +81,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Patient::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $p = Patient::findOrFail($this->confirmId);
+        $this->authorize('delete', $p);
         try {
             app(DeletePatientAction::class)->handle($p);
             session()->flash('success', "Paciente \"{$p->name}\" excluído.");

@@ -49,6 +49,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Appointment::class);
         $this->reset(['formPatientId', 'formDoctorId', 'formRoomId', 'formNotes', 'editingId', 'confirmId']);
         $this->formScheduledAt = now()->addDay()->format('Y-m-d\TH:i');
         $this->formStatus      = 'scheduled';
@@ -57,6 +58,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', \App\Models\Appointment::findOrFail($id));
         $a = Appointment::findOrFail($id);
         $this->editingId      = $id;
         $this->formPatientId  = $a->patient_id;
@@ -72,6 +74,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Appointment::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Appointment::class);
+
         $this->validate([
             'formPatientId'   => ['required', 'exists:patients,id'],
             'formDoctorId'    => ['required', 'exists:doctors,id'],
@@ -96,11 +102,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Appointment::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $a = Appointment::findOrFail($this->confirmId);
+        $this->authorize('delete', $a);
         try {
             app(DeleteAppointmentAction::class)->handle($a);
             session()->flash('success', __('Agendamento excluído.'));

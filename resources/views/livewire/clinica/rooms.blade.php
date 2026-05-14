@@ -28,6 +28,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openCreate(): void
     {
+        $this->authorize('create', \App\Models\Room::class);
         $this->reset(['formName', 'formType', 'formDepartmentId', 'editingId', 'confirmId']);
         $this->formCapacity = 1;
         $this->formIsActive = true;
@@ -36,6 +37,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function openEdit(string $id): void
     {
+        $this->authorize('update', Room::findOrFail($id));
         $room = Room::findOrFail($id);
         $this->editingId       = $id;
         $this->formName        = $room->name;
@@ -50,6 +52,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        $this->editingId
+            ? $this->authorize('update', Room::findOrFail($this->editingId))
+            : $this->authorize('create', \App\Models\Room::class);
+
         $this->validate([
             'formName'     => ['required', 'string', 'max:100'],
             'formType'     => ['required', 'string', 'max:50'],
@@ -72,11 +78,16 @@ new #[Layout('layouts.app')] class extends Component
         session()->flash('success', $msg);
     }
 
-    public function confirmDelete(string $id): void { $this->confirmId = $id; }
+    public function confirmDelete(string $id): void
+    {
+        $this->authorize('delete', Room::findOrFail($id));
+        $this->confirmId = $id;
+    }
 
     public function delete(): void
     {
         $room = Room::findOrFail($this->confirmId);
+        $this->authorize('delete', $room);
         try {
             app(DeleteRoomAction::class)->handle($room);
             session()->flash('success', "Sala \"{$room->name}\" excluída.");
