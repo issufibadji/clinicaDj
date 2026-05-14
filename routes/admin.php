@@ -1,9 +1,23 @@
 <?php
 
-use Livewire\Volt\Volt;
+use App\Http\Controllers\Impersonation\StartImpersonationController;
+use App\Http\Controllers\Impersonation\StopImpersonationController;
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
 Route::middleware(['auth', 'check2fa'])->prefix('admin')->name('admin.')->group(function () {
+
+    // ── Impersonação ──────────────────────────────────────────────────────────
+    Route::post('impersonar/{user}', StartImpersonationController::class)
+        ->middleware('role:admin')
+        ->name('impersonar');
+
+    Route::post('impersonacao/encerrar', StopImpersonationController::class)
+        ->name('impersonacao.encerrar');
+
+    Volt::route('impersonacao', 'admin.impersonation.impersonation-history')
+        ->middleware('role:admin')
+        ->name('impersonation.history');
 
     // Perfis de usuário (admin)
     Volt::route('usuarios/{user}/perfis', 'admin.access-control.user-profile-manager')

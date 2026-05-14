@@ -198,6 +198,25 @@ class User extends Authenticatable implements AuditableContract, MustVerifyEmail
         return $this->profiles()->where('role_id', $roleId)->exists();
     }
 
+    // ── Impersonation relationships ───────────────────────────────────────────
+
+    public function impersonationLogsAsAdmin(): HasMany
+    {
+        return $this->hasMany(ImpersonationLog::class, 'admin_id');
+    }
+
+    public function impersonationLogsAsTarget(): HasMany
+    {
+        return $this->hasMany(ImpersonationLog::class, 'target_id');
+    }
+
+    public function isBeingImpersonated(): bool
+    {
+        return session('impersonating') === true
+            && session('original_user_id') !== null
+            && auth()->id() === $this->id;
+    }
+
     public function sentMessages(): HasMany
     {
         return $this->hasMany(ChatMessage::class, 'from_user_id');

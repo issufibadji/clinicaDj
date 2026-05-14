@@ -21,6 +21,11 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 font-sans antialiased h-full">
 
+    {{-- Impersonation bar (shown above everything when impersonating) --}}
+    @if(session('impersonating'))
+        <livewire:impersonation.impersonation-bar />
+    @endif
+
     <div class="flex h-screen overflow-hidden"
          x-data="{ sidebarOpen: window.innerWidth >= 1024, sidebarCollapsed: false }">
 
@@ -43,6 +48,11 @@
 
         </div>
     </div>
+
+    {{-- Impersonation modal (only for admins, outside the layout flex to sit above overlay) --}}
+    @role('admin')
+        <livewire:impersonation.impersonation-modal />
+    @endrole
 
 </body>
 </html>

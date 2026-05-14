@@ -17,11 +17,19 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'check2fa'           => \App\Http\Middleware\Check2FA::class,
-            'ensure_profile'     => \App\Http\Middleware\EnsureActiveProfile::class,
-            'role'               => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission'         => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'check2fa'              => \App\Http\Middleware\Check2FA::class,
+            'ensure_profile'        => \App\Http\Middleware\EnsureActiveProfile::class,
+            'impersonation.timeout' => \App\Http\Middleware\CheckImpersonationTimeout::class,
+            'impersonation.block'   => \App\Http\Middleware\BlockDestructiveActionsOnImpersonation::class,
+            'role'                  => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission'            => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission'    => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        ]);
+
+        // Aplica middlewares de impersonação em toda a stack web
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckImpersonationTimeout::class,
+            \App\Http\Middleware\BlockDestructiveActionsOnImpersonation::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

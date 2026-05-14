@@ -30,9 +30,10 @@ class MenuItemSeeder extends Seeder
             ['label' => 'Permissões',          'route' => 'admin.permissoes.index',   'icon' => 'heroicon-o-key',             'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 3],
             ['label' => 'Vinc. Usuário',       'route' => 'admin.vinculo.index',      'icon' => 'heroicon-o-link',            'group' => 'Controle de Acesso',  'min_level' => 1, 'is_visible' => true,  'order' => 4],
             // ─── Sistema ────────────────────────────────────────────────────
-            ['label' => 'Auditoria',           'route' => 'admin.sistema.auditoria',  'icon' => 'heroicon-o-clipboard-document-list', 'group' => 'Sistema',   'min_level' => 1, 'is_visible' => true,  'order' => 1],
-            ['label' => 'Menus',               'route' => 'admin.sistema.menus',      'icon' => 'heroicon-o-bars-3',          'group' => 'Sistema',             'min_level' => 1, 'is_visible' => true,  'order' => 2],
-            ['label' => 'Configurações',       'route' => 'admin.sistema.configuracoes', 'icon' => 'heroicon-o-cog-6-tooth', 'group' => 'Sistema',             'min_level' => 1, 'is_visible' => true,  'order' => 3],
+            ['label' => 'Auditoria',           'route' => 'admin.sistema.auditoria',        'icon' => 'heroicon-o-clipboard-document-list', 'group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 1],
+            ['label' => 'Menus',               'route' => 'admin.sistema.menus',            'icon' => 'heroicon-o-bars-3',                  'group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 2],
+            ['label' => 'Configurações',       'route' => 'admin.sistema.configuracoes',    'icon' => 'heroicon-o-cog-6-tooth',             'group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 3],
+            ['label' => 'Impersonações',       'route' => 'admin.impersonation.history',    'icon' => 'heroicon-o-arrow-right-on-rectangle','group' => 'Sistema', 'min_level' => 1, 'is_visible' => true, 'order' => 4],
         ];
 
         foreach ($items as $item) {

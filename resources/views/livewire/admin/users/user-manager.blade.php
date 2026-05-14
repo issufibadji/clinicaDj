@@ -238,6 +238,16 @@ new #[Layout('layouts.app')] class extends Component
                                 </div>
                             @else
                                 <div class="flex items-center gap-1 justify-end">
+                                    @role('admin')
+                                        @if($user->id !== auth()->id() && ! $user->hasRole('admin') && ! session('impersonating'))
+                                            <button
+                                                x-on:click="$dispatch('open-impersonation-modal', { userId: '{{ $user->id }}' })"
+                                                title="Entrar como este usuário"
+                                                class="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors">
+                                                <x-heroicon-o-arrow-right-on-rectangle class="w-4 h-4" />
+                                            </button>
+                                        @endif
+                                    @endrole
                                     @can('update', $user)
                                         <button wire:click="openEdit('{{ $user->id }}')" title="Editar"
                                                 class="p-1.5 rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
