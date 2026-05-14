@@ -26,7 +26,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', ...defaultTheme.fontFamily.sans],
+                sans: ['Kode Mono', ...defaultTheme.fontFamily.mono],
             },
             colors: {
                 primary: {
