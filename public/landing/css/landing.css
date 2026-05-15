@@ -1,0 +1,371 @@
+/* ═══════════════════════════════════════════════════════════════
+   Clínica DR.João Mendes — Landing Page Styles
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Fontes ──────────────────────────────────────────────────── */
+:root {
+  --green:    #10B981;
+  --green-dk: #059669;
+  --teal:     #0D9488;
+  --bg-dark:  #0F172A;
+  --bg-mid:   #1E3A5F;
+  --text-muted: #94A3B8;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: #1e293b;
+  overflow-x: hidden;
+}
+
+/* ── Navbar ──────────────────────────────────────────────────── */
+#navbar {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.15);
+  transition: background 0.3s ease;
+}
+#navbar.scrolled {
+  background: rgba(15, 23, 42, 0.97);
+}
+.nav-link {
+  position: relative;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 0; height: 2px;
+  background: var(--green);
+  transition: width 0.3s ease;
+}
+.nav-link:hover { color: var(--green); }
+.nav-link:hover::after { width: 100%; }
+
+/* ── Hero ────────────────────────────────────────────────────── */
+.hero-section {
+  background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #065F46 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.hero-dots {
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.hero-blob {
+  position: absolute;
+  right: -10%;
+  top: 10%;
+  width: 55%;
+  height: 80%;
+  background: radial-gradient(ellipse at center, rgba(16,185,129,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1.15;
+  color: #fff;
+}
+.hero-underline {
+  position: relative;
+  display: inline-block;
+}
+.hero-underline svg {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+}
+.btn-primary-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 8px 30px rgba(16,185,129,0.35);
+  transition: all 0.25s ease;
+}
+.btn-primary-hero:hover {
+  background: var(--green-dk);
+  box-shadow: 0 12px 40px rgba(16,185,129,0.5);
+  transform: translateY(-2px);
+}
+.btn-outline-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.btn-outline-hero:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(16,185,129,0.08);
+}
+
+/* Formulário rápido */
+.quick-form {
+  background: #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  padding: 1.5rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+.quick-form select,
+.quick-form input {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-family: 'DM Sans', sans-serif;
+  color: #334155;
+  background: #f8fafc;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.quick-form select:focus,
+.quick-form input:focus { border-color: var(--green); }
+
+/* ── Sobre ───────────────────────────────────────────────────── */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.2;
+  color: #0f172a;
+}
+.section-title-light { color: #fff; }
+
+/* Círculos de estatísticas */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+.stat-svg-wrap { position: relative; width: 110px; height: 110px; }
+.stat-svg-wrap svg { width: 100%; height: 100%; }
+.stat-arc {
+  stroke-dasharray: 251;
+  stroke-dashoffset: 251;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.4,0,0.2,1);
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}
+.stat-svg-wrap.animated .stat-arc { stroke-dashoffset: var(--offset, 50); }
+.stat-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  max-width: 100px;
+}
+
+/* ── Serviços ────────────────────────────────────────────────── */
+.service-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(16,185,129,0.15);
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem;
+  cursor: default;
+  transition: all 0.3s ease;
+}
+.service-card:hover {
+  border-color: rgba(16,185,129,0.6);
+  background: rgba(16,185,129,0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(16,185,129,0.12);
+}
+.service-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(16,185,129,0.12);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* ── Equipe ──────────────────────────────────────────────────── */
+.team-card {
+  background: #fff;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+.team-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+.team-avatar {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--teal) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  position: relative;
+  overflow: hidden;
+}
+.team-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(16,185,129,0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.team-card:hover .team-overlay { opacity: 1; }
+
+/* ── Especialidades ──────────────────────────────────────────── */
+.specialty-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.specialty-item:hover {
+  color: rgba(255,255,255,0.85);
+  padding-left: 1.4rem;
+}
+.specialty-item.active {
+  color: #fff;
+  border-left-color: var(--green);
+  padding-left: 1.4rem;
+  background: rgba(16,185,129,0.06);
+}
+
+/* ── Formulário de contato ───────────────────────────────────── */
+.contact-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.contact-input::placeholder { color: rgba(255,255,255,0.35); }
+.contact-input:focus { border-color: var(--green); background: rgba(255,255,255,0.08); }
+.contact-input-wrap { position: relative; }
+.contact-input-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.footer-link {
+  color: rgba(255,255,255,0.45);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.footer-link:hover { color: var(--green); }
+
+/* ── Animações de entrada ───────────────────────────────────── */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-animate].visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-animate-stagger] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+[data-animate-stagger].visible > *:nth-child(1) { transition-delay: 0.05s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(2) { transition-delay: 0.12s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(3) { transition-delay: 0.19s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(4) { transition-delay: 0.26s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(5) { transition-delay: 0.33s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(6) { transition-delay: 0.40s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(7) { transition-delay: 0.47s; opacity:1; transform:none; }
+[data-animate-stagger].visible > *:nth-child(8) { transition-delay: 0.54s; opacity:1; transform:none; }
+
+/* ── Pulse WhatsApp ─────────────────────────────────────────── */
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.45); }
+  50%       { box-shadow: 0 0 0 16px rgba(16,185,129,0); }
+}
+.pulse-green { animation: pulse-green 2.5s ease infinite; }
+
+/* ── Misc ───────────────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.divider-green {
+  height: 3px;
+  width: 48px;
+  background: linear-gradient(90deg, var(--green), var(--teal));
+  border-radius: 9999px;
+}

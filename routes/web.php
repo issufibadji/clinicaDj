@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::view('/', 'welcome');
+Route::get('/', fn() => view('landing'))->name('landing');
 
 // Push subscription endpoint
 Route::post('/push-subscriptions', [\App\Http\Controllers\PushSubscriptionController::class, 'store'])
